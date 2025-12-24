@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جدول الوردية الشهرية - ٢١‏/١٢‏/٢٠٢٥</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            direction: rtl;
+            background-color: white;
+            padding: 8px;
+            overflow: hidden !important;
+            height: 100vh;
+            width: 100vw;
+        }
+        
+        .container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .table-wrapper {
+            flex: 1;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+        }
+        
+        table {
+            width: 86%;
+            height: 90%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            font-size: 9px;
+            text-align: center;
+            table-layout: fixed;
+            border: 1.5px solid #333;
+        }
+        
+        th, td {
+            border: 1.3px solid #333 !important;
+            padding: 1.2px !important;
+            font-weight: 900;
+            word-wrap: break-word;
+            overflow: hidden;
+            vertical-align: middle;
+            line-height: 1.1;
+            position: relative;
+        }
+        
+        tr {
+            height: calc(100% / 32);
+        }
+        
+        thead th {
+            background-color: #2c5f5f !important;
+            color: white !important;
+            font-weight: 900;
+            font-size: 10px !important; /* تم تصغير الخط من 11 إلى 10 */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            white-space: normal;
+            padding: 6px !important;
+        }
+        
+        /* تكبير النصوص في رأس الجدول للأعمدة 4 و 5 و 6 */
+        th:nth-child(4),
+        th:nth-child(5),
+        th:nth-child(6) {
+            font-size: 14px !important;
+            font-weight: bold !important;
+        }
+        
+        th:nth-child(1), td:nth-child(1) { 
+            width: 12%; 
+            font-size: 12px !important; /* تم تصغير الخط من 13 إلى 12 */
+        }
+        th:nth-child(2), td:nth-child(2) { width: 6%; }
+        th:nth-child(3), td:nth-child(3) { width: 10%; }
+        th:nth-child(4), td:nth-child(4) { width: 7.9%; }
+        th:nth-child(5), td:nth-child(5) { width: 7.9%; }
+        th:nth-child(6), td:nth-child(6) { width: 7.9%; }
+        
+        .color-a {
+            background-color: #F0DB80 !important;
+            color: #333 !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        
+        .color-b {
+            background-color: #00FFFF !important;
+            color: #333 !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        
+        .color-c {
+            background-color: #A4C2F4 !important;
+            color: #333 !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        
+        .color-d {
+            background-color: #E77D7D !important;
+            color: #333 !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        
+        .day-column, .date-column {
+            background-color: #EFEFEF !important;
+            font-weight: 900 !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        
+        .occasion-column {
+            background-color: #EFEFEF !important;
+            font-weight: 900 !important;
+            text-align: right !important;
+            padding-right: 2px !important;
+            font-size: 12px !important; /* تم تصغير الخط من 13 إلى 12 */
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        
+        .empty-cell {
+            background-color: #f9f9f9 !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        
+        .highlighted-row {
+            background-color: #CCCCCC !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        
+        @media print {
+            body {
+                margin: 0 !important;
+                padding: 3px !important;
+                height: 100vh !important;
+                width: 100vw !important;
+                overflow: hidden !important;
+            }
+            
+            .container {
+                height: 100vh !important;
+                width: 100vw !important;
+            }
+            
+            .table-wrapper {
+                height: 100vh !important;
+            }
+            
+            .export-section {
+                display: none !important;
+            }
+            
+            table {
+                font-size: 7px !important;
+                height: 100% !important;
+            }
+            
+            th, td {
+                padding: 0.5px !important;
+                border: 0.5px solid #333 !important;
+            }
+            
+            thead th {
+                font-size: 6px !important;
+            }
+            
+            /* الحفاظ على حجم خط خانة المناسبات عند الطباعة */
+            td:nth-child(1) {
+                font-size: 9px !important; /* تم تصغير الخط من 10 إلى 9 */
+            }
+            
+            /* تكبير النصوص في رأس الجدول للأعمدة 4 و 5 و 6 عند الطباعة */
+            th:nth-child(4),
+            th:nth-child(5),
+            th:nth-child(6) {
+                font-size: 10px !important;
+                font-weight: bold !important;
+            }
+        }
+        
+        @media screen and (max-width: 768px) {
+            table {
+                font-size: 7px !important;
+            }
+            
+            th, td {
+                padding: 0.5px !important;
+            }
+            
+            /* تعديل حجم خط خانة المناسبات للشاشات الصغيرة */
+            td:nth-child(1) {
+                font-size: 9px !important; /* تم تصغير الخط من 10 إلى 9 */
+            }
+            
+            /* تكبير النصوص في رأس الجدول للأعمدة 4 و 5 و 6 للشاشات الصغيرة */
+            th:nth-child(4),
+            th:nth-child(5),
+            th:nth-child(6) {
+                font-size: 10px !important;
+                font-weight: bold !important;
+            }
+        }
+        
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        
+        * {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        th:nth-child(4),
+        th:nth-child(5),
+        th:nth-child(6),
+        td:nth-child(4),
+        td:nth-child(5),
+        td:nth-child(6) {
+            font-size: 10px !important;
+            padding-right: 1px !important;
+            padding-left: 1px !important;
+        }
+        
+        th:nth-child(2),
+        td:nth-child(2) {
+            font-size: 10px !important;
+            padding-right: 2px !important;
+            padding-left: 2px !important;
+            line-height: 1.1;
+            font-weight: 900;
+        }
+        
+        th:nth-child(3),
+        td:nth-child(3) {
+            font-weight: 900 !important;
+            font-size: 9px !important;
+        }
+        
+        td:nth-child(4),
+        td:nth-child(5),
+        td:nth-child(6) {
+            font-size: 10px !important;
+            font-weight: bold;
+        }
+        
+        thead {
+            border-bottom: 2px solid transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="table-wrapper">
+            <table id="scheduleTable">
+                <thead>
+                    <tr>
+                        <th>المنـاسـبـات</th>
+                        <th>التـاريخ</th>
+                        <th>اليـــوم</th>
+                        <th>الأولــــي</th>
+                        <th>الثـانيـــة</th>
+                        <th>الثـالثـــة</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="occasion-column" style="transition: 0.3s; background-color: rgb(239, 239, 239);">&nbsp;&nbsp;</td>
+                        <td class="date-column" style="transition: 0.3s; background-color: rgb(239, 239, 239);">1</td>
+                        <td class="day-column" style="background-color: rgb(239, 239, 239);">الأحد</td>
+                        <td class="color-c">C</td>
+                        <td class="color-d">D</td>
+                        <td class="color-b">B</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell"></td>
+                        <td class="date-column">2</td>
+                        <td class="day-column">الإثنين</td>
+                        <td class="color-c">C</td>
+                        <td class="color-a">A</td>
+                        <td class="color-b">B</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell"></td>
+                        <td class="date-column">3</td>
+                        <td class="day-column">الثلاثاء</td>
+                        <td class="color-c">C</td>
+                        <td class="color-a">A</td>
+                        <td class="color-b">B</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell"></td>
+                        <td class="date-column">4</td>
+                        <td class="day-column">الأربعاء</td>
+                        <td class="color-c">C</td>
+                        <td class="color-a">A</td>
+                        <td class="color-d">D</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell"></td>
+                        <td class="date-column">5</td>
+                        <td class="day-column">الخميس</td>
+                        <td class="color-c">C</td>
+                        <td class="color-a">A</td>
+                        <td class="color-d">D</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell" style="background-color: rgb(249, 249, 249);"><br></td>
+                        <td class="date-column" style="background-color: rgb(239, 239, 239);">6</td>
+                        <td class="day-column" style="background-color: rgb(239, 239, 239);">الجمعة</td>
+                        <td class="color-b">B</td>
+                        <td class="color-a">A</td>
+                        <td class="color-d">D</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell"></td>
+                        <td class="date-column">7</td>
+                        <td class="day-column">السبت</td>
+                        <td class="color-b">B</td>
+                        <td class="color-c">C</td>
+                        <td class="color-d">D</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell"></td>
+                        <td class="date-column">8</td>
+                        <td class="day-column">الأحد</td>
+                        <td class="color-b">B</td>
+                        <td class="color-c">C</td>
+                        <td class="color-d">D</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell"></td>
+                        <td class="date-column">9</td>
+                        <td class="day-column">الإثنين</td>
+                        <td class="color-b">B</td>
+                        <td class="color-c">C</td>
+                        <td class="color-a">A</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell"></td>
+                        <td class="date-column">10</td>
+                        <td class="day-column">الثلاثاء</td>
+                        <td class="color-b">B</td>
+                        <td class="color-c">C</td>
+                        <td class="color-a">A</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell"></td>
+                        <td class="date-column">11</td>
+                        <td class="day-column">الأربعاء</td>
+                        <td class="color-d">D</td>
+                        <td class="color-c">C</td>
+                        <td class="color-a">A</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell"></td>
+                        <td class="date-column">12</td>
+                        <td class="day-column">الخميس</td>
+                        <td class="color-d">D</td>
+                        <td class="color-b">B</td>
+                        <td class="color-a">A</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell" style="background-color: rgb(249, 249, 249);"><br></td>
+                        <td class="date-column" style="background-color: rgb(239, 239, 239);">13</td>
+                        <td class="day-column" style="background-color: rgb(239, 239, 239);">الجمعة</td>
+                        <td class="color-d">D</td>
+                        <td class="color-b">B</td>
+                        <td class="color-a">A</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell"></td>
+                        <td class="date-column">14</td>
+                        <td class="day-column">السبت</td>
+                        <td class="color-d">D</td>
+                        <td class="color-b">B</td>
+                        <td class="color-c">C</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell"></td>
+                        <td class="date-column">15</td>
+                        <td class="day-column">الأحد</td>
+                        <td class="color-d">D</td>
+                        <td class="color-b">B</td>
+                        <td class="color-c">C</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell"></td>
+                        <td class="date-column">16</td>
+                        <td class="day-column">الإثنين</td>
+                        <td class="color-a">A</td>
+                        <td class="color-b">B</td>
+                        <td class="color-c">C</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell" style="background-color: rgb(249, 249, 249);"><br></td>
+                        <td class="date-column" style="background-color: rgb(239, 239, 239);">17</td>
+                        <td class="day-column" style="background-color: rgb(239, 239, 239);">الثلاثاء</td>
+                        <td class="color-a">A</td>
+                        <td class="color-d">D</td>
+                        <td class="color-c">C</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell" style="background-color: rgb(249, 249, 249);"><br></td>
+                        <td class="date-column" style="background-color: rgb(239, 239, 239);">18</td>
+                        <td class="day-column" style="background-color: rgb(239, 239, 239);">الأربعاء</td>
+                        <td class="color-a">A</td>
+                        <td class="color-d">D</td>
+                        <td class="color-c">C</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell"></td>
+                        <td class="date-column">19</td>
+                        <td class="day-column">الخميس</td>
+                        <td class="color-a">A</td>
+                        <td class="color-d">D</td>
+                        <td class="color-b">B</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell"></td>
+                        <td class="date-column">20</td>
+                        <td class="day-column">الجمعة</td>
+                        <td class="color-a">A</td>
+                        <td class="color-d">D</td>
+                        <td class="color-b">B</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell"></td>
+                        <td class="date-column">21</td>
+                        <td class="day-column">السبت</td>
+                        <td class="color-c">C</td>
+                        <td class="color-d">D</td>
+                        <td class="color-b">B</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell"></td>
+                        <td class="date-column">22</td>
+                        <td class="day-column">الأحد</td>
+                        <td class="color-c">C</td>
+                        <td class="color-a">A</td>
+                        <td class="color-b">B</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell" style="background-color: rgb(249, 249, 249);"><br></td>
+                        <td class="date-column" style="background-color: rgb(239, 239, 239);">23</td>
+                        <td class="day-column" style="background-color: rgb(239, 239, 239);">الإثنين</td>
+                        <td class="color-c">C</td>
+                        <td class="color-a">A</td>
+                        <td class="color-b">B</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell"></td>
+                        <td class="date-column">24</td>
+                        <td class="day-column">الثلاثاء</td>
+                        <td class="color-c">C</td>
+                        <td class="color-a">A</td>
+                        <td class="color-d">D</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell"></td>
+                        <td class="date-column">25</td>
+                        <td class="day-column">الأربعاء</td>
+                        <td class="color-c">C</td>
+                        <td class="color-a">A</td>
+                        <td class="color-d">D</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell" style="background-color: rgb(249, 249, 249);"><br></td>
+                        <td class="date-column" style="background-color: rgb(239, 239, 239);">26</td>
+                        <td class="day-column" style="background-color: rgb(239, 239, 239);">الخميس</td>
+                        <td class="color-b">B</td>
+                        <td class="color-a">A</td>
+                        <td class="color-d">D</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell" style="background-color: rgb(249, 249, 249);"><br></td>
+                        <td class="date-column" style="background-color: rgb(239, 239, 239);">27</td>
+                        <td class="day-column" style="background-color: rgb(239, 239, 239);">الجمعة</td>
+                        <td class="color-b">B</td>
+                        <td class="color-c">C</td>
+                        <td class="color-d">D</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell"></td>
+                        <td class="date-column">28</td>
+                        <td class="day-column">السبت</td>
+                        <td class="color-b">B</td>
+                        <td class="color-c">C</td>
+                        <td class="color-d">D</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell"></td>
+                        <td class="date-column">29</td>
+                        <td class="day-column">الأحد</td>
+                        <td class="color-b">B</td>
+                        <td class="color-c">C</td>
+                        <td class="color-a">A</td>
+                    </tr>
+                    <tr>
+                        <td class="empty-cell" style="background-color: rgb(249, 249, 249);"><br></td>
+                        <td class="date-column" style="background-color: rgb(239, 239, 239);">30</td>
+                        <td class="day-column" style="background-color: rgb(239, 239, 239);">الإثنين</td>
+                        <td class="color-b">B</td>
+                        <td class="color-c">C</td>
+                        <td class="color-a">A</td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
