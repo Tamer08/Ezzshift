@@ -6,180 +6,161 @@
 <title>أوقات الصلاة</title>
 
 <style>
-* {
-    box-sizing: border-box;
+*{box-sizing:border-box}
+body{margin:0;font-family:Tahoma,Arial;background:#fff;color:#000}
+.container{min-height:100vh;padding:15px;display:flex;justify-content:center;align-items:center}
+.card{
+ width:100%;max-width:420px;background:#E6E6E6;border-radius:20px;
+ padding:20px;border:1px solid #D0D0D0;box-shadow:0 8px 20px rgba(0,0,0,.12)
 }
-
-body {
-    margin: 0;
-    font-family: Tahoma, Arial, sans-serif;
-    background: #ffffff;
-    color: #000;
+h1{text-align:center;font-size:24px;margin:0 0 10px;color:#D48B00;font-weight:800}
+.countdown{text-align:center;font-size:17px;margin-bottom:15px;color:#FEA500;font-weight:bold}
+.prayer{
+ display:flex;justify-content:space-between;align-items:center;
+ padding:14px;margin-bottom:10px;background:#fff;border-radius:14px;
+ font-size:16px;border:1px solid #d6d6d6
 }
-
-/* الحاوية */
-.container {
-    min-height: 100vh;
-    padding: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* الإطار */
-.card {
-    width: 100%;
-    max-width: 420px;
-    background: #E6E6E6;
-    border-radius: 20px;
-    padding: 20px;
-    border: 1px solid #D0D0D0;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-}
-
-/* العنوان (أغمق) */
-h1 {
-    text-align: center;
-    font-size: 24px;
-    margin: 0 0 10px;
-    color: #D48B00; /* أغمق */
-    font-weight: 800;
-}
-
-/* العدّاد */
-.countdown {
-    text-align: center;
-    font-size: 17px;
-    margin-bottom: 15px;
-    color: #FEA500;
-    font-weight: bold;
-}
-
-/* الصلوات */
-.prayer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px;
-    margin-bottom: 10px;
-    background: #ffffff;
-    border-radius: 14px;
-    font-size: 16px;
-    border: 1px solid #d6d6d6;
-}
-
-.prayer span:last-child {
-    font-weight: bold;
-}
-
-/* الصلاة القادمة */
-.prayer.active {
-    background: #FEA500;
-    color: #fff;
-    border-color: #FEA500;
-}
-
-/* الفوتر */
-.footer {
-    text-align: center;
-    margin-top: 12px;
-    font-size: 14px;
-    color: #666;
-}
+.prayer span:last-child{font-weight:bold}
+.prayer.active{background:#FEA500;color:#fff;border-color:#FEA500}
+.footer{text-align:center;margin-top:12px;font-size:14px;color:#666}
 </style>
 </head>
 
 <body>
 
 <div class="container">
-    <div class="card">
-        <h1>🕌 أوقات الصلاة</h1>
-        <div class="countdown" id="countdown">جاري التحميل...</div>
-        <div id="prayers"></div>
-        <div class="footer" id="location"></div>
-    </div>
+  <div class="card">
+    <h1>🕌 أوقات الصلاة</h1>
+    <div class="countdown" id="countdown">جاري التحميل...</div>
+    <div id="prayers"></div>
+    <div class="footer" id="location"></div>
+  </div>
 </div>
 
 <script>
-const city = "Cairo";
-const country = "Egypt";
+/* ================== الإعدادات ================== */
+const city="Cairo";
+const country="Egypt";
+const STORAGE_KEY="prayer_times_cairo";
 
-const prayerOrder = [
-    { key: "Fajr", name: "الفجر" },
-    { key: "Sunrise", name: "الشروق" },
-    { key: "Dhuhr", name: "الظهر" },
-    { key: "Asr", name: "العصر" },
-    { key: "Maghrib", name: "المغرب" },
-    { key: "Isha", name: "العشاء" }
+/* ================== ترتيب الصلوات ================== */
+const prayerOrder=[
+ {key:"Fajr",name:"الفجر"},
+ {key:"Sunrise",name:"الشروق"},
+ {key:"Dhuhr",name:"الظهر"},
+ {key:"Asr",name:"العصر"},
+ {key:"Maghrib",name:"المغرب"},
+ {key:"Isha",name:"العشاء"}
 ];
 
-let prayerTimes = {};
+let prayerTimes={};
 
-function formatTo12Hour(time24) {
-    let [h, m] = time24.split(":").map(Number);
-    const ampm = h >= 12 ? "م" : "ص";
-    h = h % 12 || 12;
-    return `${h}:${m.toString().padStart(2, "0")} ${ampm}`;
+/* ================== أدوات ================== */
+function cleanTime(t){
+ if(!t) return null;
+ return t.split(" ")[0]; // إزالة (EET)
 }
 
-fetch(`https://api.aladhan.com/v1/timingsByCity?city=${city}&country=${country}&method=5`)
-.then(res => res.json())
-.then(data => {
-    prayerTimes = data.data.timings;
-    document.getElementById("location").innerText =
-        `توقيت ${city} - ${country}`;
-    renderPrayers();
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-});
-
-function renderPrayers(active = null) {
-    const box = document.getElementById("prayers");
-    box.innerHTML = "";
-
-    prayerOrder.forEach(p => {
-        const div = document.createElement("div");
-        div.className = "prayer" + (p.key === active ? " active" : "");
-        div.innerHTML = `
-            <span>${p.name}</span>
-            <span>${formatTo12Hour(prayerTimes[p.key])}</span>
-        `;
-        box.appendChild(div);
-    });
+function to12(t){
+ t=cleanTime(t);
+ if(!t) return "--:--";
+ let[h,m]=t.split(":").map(Number);
+ const p=h>=12?"م":"ص";
+ h=h%12||12;
+ return `${h}:${m.toString().padStart(2,"0")} ${p}`;
 }
 
-function updateCountdown() {
-    const now = new Date();
-    let nextPrayer, nextTime;
+/* ================== العرض ================== */
+function renderPrayers(active=null){
+ const box=document.getElementById("prayers");
+ box.innerHTML="";
+ prayerOrder.forEach(p=>{
+  const div=document.createElement("div");
+  div.className="prayer"+(p.key===active?" active":"");
+  div.innerHTML=`
+   <span>${p.name}</span>
+   <span>${to12(prayerTimes[p.key])}</span>
+  `;
+  box.appendChild(div);
+ });
+}
 
-    for (let p of prayerOrder) {
-        const [h, m] = prayerTimes[p.key].split(":");
-        const t = new Date();
-        t.setHours(h, m, 0, 0);
-        if (t > now) {
-            nextPrayer = p;
-            nextTime = t;
-            break;
-        }
-    }
+function updateCountdown(){
+ const now=new Date();
+ let nextPrayer,nextTime;
 
-    if (!nextPrayer) {
-        nextPrayer = prayerOrder[0];
-        const [h, m] = prayerTimes[nextPrayer.key].split(":");
-        nextTime = new Date();
-        nextTime.setDate(nextTime.getDate() + 1);
-        nextTime.setHours(h, m, 0, 0);
-    }
+ for(let p of prayerOrder){
+  const tStr=cleanTime(prayerTimes[p.key]);
+  if(!tStr) continue;
+  const [h,m]=tStr.split(":").map(Number);
+  const t=new Date();
+  t.setHours(h,m,0,0);
+  if(t>now){nextPrayer=p;nextTime=t;break;}
+ }
 
-    const diff = nextTime - now;
-    const h = Math.floor(diff / 3600000);
-    const m = Math.floor(diff % 3600000 / 60000);
-    const s = Math.floor(diff % 60000 / 1000);
+ if(!nextPrayer){
+  nextPrayer=prayerOrder[0];
+  const [h,m]=cleanTime(prayerTimes[nextPrayer.key]).split(":").map(Number);
+  nextTime=new Date();
+  nextTime.setDate(nextTime.getDate()+1);
+  nextTime.setHours(h,m,0,0);
+ }
 
-    document.getElementById("countdown").innerText =
-        `الصلاة القادمة: ${nextPrayer.name} بعد ${h}س ${m}د ${s}ث`;
+ const diff=nextTime-now;
+ const h=Math.floor(diff/3600000);
+ const m=Math.floor(diff%3600000/60000);
+ const s=Math.floor(diff%60000/1000);
 
-    renderPrayers(nextPrayer.key);
+ document.getElementById("countdown").innerText=
+  `الصلاة القادمة: ${nextPrayer.name} بعد ${h}س ${m}د ${s}ث`;
+
+ renderPrayers(nextPrayer.key);
+}
+
+/* ================== تحميل البيانات (أونلاين / أوفلاين) ================== */
+function load(){
+ const cached=localStorage.getItem(STORAGE_KEY);
+ if(cached){
+  prayerTimes=JSON.parse(cached);
+  document.getElementById("location").innerText=`توقيت ${city} - ${country}`;
+  renderPrayers();
+  updateCountdown();
+  setInterval(updateCountdown,1000);
+  return;
+ }
+
+ fetch(`https://api.aladhan.com/v1/timingsByCity?city=${city}&country=${country}&method=5`)
+  .then(r=>r.json())
+  .then(j=>{
+   prayerTimes=j.data.timings;
+   localStorage.setItem(STORAGE_KEY,JSON.stringify(prayerTimes));
+   document.getElementById("location").innerText=`توقيت ${city} - ${country}`;
+   renderPrayers();
+   updateCountdown();
+   setInterval(updateCountdown,1000);
+  })
+  .catch(()=>{
+   document.getElementById("countdown").innerText="لا يوجد إنترنت ولا بيانات محفوظة";
+  });
+}
+
+load();
+
+/* ================== Service Worker داخلي ================== */
+if("serviceWorker"in navigator){
+ const swCode=`
+  self.addEventListener("fetch",e=>{
+   e.respondWith(
+    fetch(e.request).then(res=>{
+     const r=res.clone();
+     caches.open("prayer-cache").then(c=>c.put(e.request,r));
+     return res;
+    }).catch(()=>caches.match(e.request))
+   );
+  });
+ `;
+ const blob=new Blob([swCode],{type:"text/javascript"});
+ navigator.serviceWorker.register(URL.createObjectURL(blob));
 }
 </script>
 
