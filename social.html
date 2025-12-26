@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>menu</title>
+
+<style>
+body{
+  margin:0;
+  padding:12px;
+  background:#f6f6f6;
+  font-family: Arial, sans-serif;
+}
+
+table{
+  width:100%;
+  border-spacing:20px 18px;
+  table-layout:fixed;
+}
+td{ width:33.33%; }
+
+.item{
+  height:100px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+.icon{
+  width:58px;
+  height:58px;
+  margin-bottom:6px;
+  border-radius:50%;
+  background:#FEA500;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.icon svg{
+  width:30px;
+  height:30px;
+  fill:#fff;
+}
+
+/* ✅ النص بعد التعديل */
+.text{
+  font-size:13px;          /* تصغير الخط */
+  font-weight:600;
+  color:#333;
+
+  white-space:nowrap;      /* سطر واحد فقط */
+  overflow:hidden;         /* إخفاء الزيادة */
+  text-overflow:ellipsis;  /* … عند الطول */
+  max-width:100%;
+}
+
+a{
+  text-decoration:none;
+  color:inherit;
+}
+</style>
+</head>
+
+<body>
+
+<table>
+<tr>
+  <td>
+    <a href="open://date">
+      <div class="item">
+        <div class="icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M7 2v2H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2H7zm12 8H5v9h14v-9z"/>
+          </svg>
+        </div>
+        <div class="text">التاريخ اليوم</div>
+      </div>
+    </a>
+  </td>
+
+  <td>
+    <a href="open://shift">
+      <div class="item">
+        <div class="icon">
+          <svg viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="6"/>
+            <rect x="16" y="16" width="6" height="2" transform="rotate(45 16 16)"/>
+          </svg>
+        </div>
+        <div class="text">بحث الورادي</div>
+      </div>
+    </a>
+  </td>
+
+  <td>
+    <a href="open://convert">
+      <div class="item">
+        <div class="icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 4V1L8 5l4 4V6c3.3 0 6 2.7 6 6a6 6 0 0 1-6 6 6 6 0 0 1-5.7-4H4.2A8 8 0 0 0 12 20a8 8 0 0 0 0-16z"/>
+          </svg>
+        </div>
+        <div class="text">محول التاريخ</div>
+      </div>
+    </a>
+  </td>
+</tr>
+
+<tr>
+  <td>
+    <a href="open://salah">
+      <div class="item">
+        <div class="icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 3c-4 3-6 6-6 9v7h12v-7c0-3-2-6-6-9z"/>
+            <rect x="11" y="12" width="2" height="7"/>
+            <rect x="4" y="7" width="2" height="12"/>
+            <rect x="18" y="7" width="2" height="12"/>
+          </svg>
+        </div>
+        <div class="text">مواقيت الصلاة</div>
+      </div>
+    </a>
+  </td>
+
+  <td>
+    <a href="open://ramadan">
+      <div class="item">
+        <div class="icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M15.5 2.5A9.5 9.5 0 1 0 21 12a7.5 7.5 0 1 1-5.5-9.5z"/>
+          </svg>
+        </div>
+        <div class="text">إمساكية رمضان</div>
+      </div>
+    </a>
+  </td>
+
+  <td>
+    <a href="open://newpage">
+      <div class="item">
+        <div class="icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M2 20h20v-2H2v2zM4 18h16l-2-8H6l-2 8zM9 2h6v4H9z"/>
+          </svg>
+        </div>
+        <div class="text">تحت الإنشاء</div>
+      </div>
+    </a>
+  </td>
+</tr>
+</table>
+
+</body>
+</html>

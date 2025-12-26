@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أوقات الصلاة</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Tahoma, Arial, sans-serif;
+    background: #ffffff;
+    color: #000;
+}
+
+/* الحاوية */
+.container {
+    min-height: 100vh;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* الإطار */
+.card {
+    width: 100%;
+    max-width: 420px;
+    background: #E6E6E6;
+    border-radius: 20px;
+    padding: 20px;
+    border: 1px solid #D0D0D0;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+/* العنوان (أغمق) */
+h1 {
+    text-align: center;
+    font-size: 24px;
+    margin: 0 0 10px;
+    color: #D48B00; /* أغمق */
+    font-weight: 800;
+}
+
+/* العدّاد */
+.countdown {
+    text-align: center;
+    font-size: 17px;
+    margin-bottom: 15px;
+    color: #FEA500;
+    font-weight: bold;
+}
+
+/* الصلوات */
+.prayer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px;
+    margin-bottom: 10px;
+    background: #ffffff;
+    border-radius: 14px;
+    font-size: 16px;
+    border: 1px solid #d6d6d6;
+}
+
+.prayer span:last-child {
+    font-weight: bold;
+}
+
+/* الصلاة القادمة */
+.prayer.active {
+    background: #FEA500;
+    color: #fff;
+    border-color: #FEA500;
+}
+
+/* الفوتر */
+.footer {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 14px;
+    color: #666;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="card">
+        <h1>🕌 أوقات الصلاة</h1>
+        <div class="countdown" id="countdown">جاري التحميل...</div>
+        <div id="prayers"></div>
+        <div class="footer" id="location"></div>
+    </div>
+</div>
+
+<script>
+const city = "Cairo";
+const country = "Egypt";
+
+const prayerOrder = [
+    { key: "Fajr", name: "الفجر" },
+    { key: "Sunrise", name: "الشروق" },
+    { key: "Dhuhr", name: "الظهر" },
+    { key: "Asr", name: "العصر" },
+    { key: "Maghrib", name: "المغرب" },
+    { key: "Isha", name: "العشاء" }
+];
+
+let prayerTimes = {};
+
+function formatTo12Hour(time24) {
+    let [h, m] = time24.split(":").map(Number);
+    const ampm = h >= 12 ? "م" : "ص";
+    h = h % 12 || 12;
+    return `${h}:${m.toString().padStart(2, "0")} ${ampm}`;
+}
+
+fetch(`https://api.aladhan.com/v1/timingsByCity?city=${city}&country=${country}&method=5`)
+.then(res => res.json())
+.then(data => {
+    prayerTimes = data.data.timings;
+    document.getElementById("location").innerText =
+        `توقيت ${city} - ${country}`;
+    renderPrayers();
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+});
+
+function renderPrayers(active = null) {
+    const box = document.getElementById("prayers");
+    box.innerHTML = "";
+
+    prayerOrder.forEach(p => {
+        const div = document.createElement("div");
+        div.className = "prayer" + (p.key === active ? " active" : "");
+        div.innerHTML = `
+            <span>${p.name}</span>
+            <span>${formatTo12Hour(prayerTimes[p.key])}</span>
+        `;
+        box.appendChild(div);
+    });
+}
+
+function updateCountdown() {
+    const now = new Date();
+    let nextPrayer, nextTime;
+
+    for (let p of prayerOrder) {
+        const [h, m] = prayerTimes[p.key].split(":");
+        const t = new Date();
+        t.setHours(h, m, 0, 0);
+        if (t > now) {
+            nextPrayer = p;
+            nextTime = t;
+            break;
+        }
+    }
+
+    if (!nextPrayer) {
+        nextPrayer = prayerOrder[0];
+        const [h, m] = prayerTimes[nextPrayer.key].split(":");
+        nextTime = new Date();
+        nextTime.setDate(nextTime.getDate() + 1);
+        nextTime.setHours(h, m, 0, 0);
+    }
+
+    const diff = nextTime - now;
+    const h = Math.floor(diff / 3600000);
+    const m = Math.floor(diff % 3600000 / 60000);
+    const s = Math.floor(diff % 60000 / 1000);
+
+    document.getElementById("countdown").innerText =
+        `الصلاة القادمة: ${nextPrayer.name} بعد ${h}س ${m}د ${s}ث`;
+
+    renderPrayers(nextPrayer.key);
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>البحث في الورادي</title>
+
+<style>
+:root {
+    --primary: #FEA500;   /* لون الهوية */
+    --bg: #f7f7f7;
+    --card: #ffffff;
+    --text: #1f2933;
+    --border: #e5e7eb;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 16px;
+    background: var(--bg);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;   /* ⬅️ للأعلى */
+    min-height: 100vh;
+    padding-top: 60px;         /* ⬅️ مسافة من الأعلى */
+}
+
+/* ===== الكرت الرئيسي ===== */
+.container {
+    width: 100%;
+    max-width: 520px;
+    background: var(--card);
+    border-radius: 22px;
+    padding: 22px 20px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== العنوان ===== */
+h1 {
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: var(--primary);
+    font-weight: 800;
+}
+
+/* ===== اختيار التاريخ ===== */
+.date-selector {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+select {
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #fafafa;
+    transition: 0.25s;
+}
+
+select:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: #fff;
+}
+
+/* ===== زر ===== */
+button {
+    width: 100%;
+    padding: 12px;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 14px;
+    border: none;
+    background: linear-gradient(135deg, var(--primary), #ffbb33);
+    color: #fff;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+/* ===== النتائج ===== */
+.results {
+    margin-top: 20px;
+}
+
+.date-display {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 14px;
+}
+
+/* ===== بطاقات الورديات ===== */
+.shift-info {
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 600;
+    background: #fdfdfd;
+    border-right: 6px solid;
+}
+
+/* ألوان الورديات */
+.shift-morning { border-color: var(--primary); }
+.shift-noon    { border-color: #ff9f1c; }
+.shift-evening { border-color: #ff7a00; }
+.shift-rest    { border-color: #bfbfbf; }
+
+/* ===== موبايل ===== */
+@media (max-width: 360px) {
+    h1 { font-size: 18px; }
+    .date-display { font-size: 14px; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>🔍 البحث في الورادي</h1>
+
+    <div class="date-selector">
+        <select id="day"></select>
+        <select id="month"></select>
+        <select id="year"></select>
+    </div>
+
+    <button id="check-btn">عرض حالة الورديات</button>
+
+    <div class="results">
+        <div class="date-display" id="date-display">الرجاء اختيار تاريخ</div>
+        <div id="shift-results"></div>
+    </div>
+</div>
+
+<script>
+function getNumberText(num) {
+    const numbers = ['أول', 'ثاني', 'ثالث', 'رابع', 'خامس'];
+    return numbers[num - 1] || num;
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const daySelect = document.getElementById('day');
+    const monthSelect = document.getElementById('month');
+    const yearSelect = document.getElementById('year');
+
+    for (let i = 1; i <= 31; i++) {
+        daySelect.innerHTML += `<option value="${i}">${i}</option>`;
+    }
+
+    const months = [
+        "يناير","فبراير","مارس","أبريل","مايو","يونيو",
+        "يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"
+    ];
+    months.forEach((m,i) =>
+        monthSelect.innerHTML += `<option value="${i+1}">${m}</option>`
+    );
+
+    for (let y = 2025; y <= 2040; y++) {
+        yearSelect.innerHTML += `<option value="${y}">${y}</option>`;
+    }
+
+    const now = new Date();
+    daySelect.value = now.getDate();
+    monthSelect.value = now.getMonth() + 1;
+    yearSelect.value = now.getFullYear();
+});
+
+function daysBetween(d1, d2) {
+    return Math.round((d2 - d1) / 86400000);
+}
+
+function getGroupStatus(group, date) {
+    const startDate = new Date(2025, 0, 1);
+    const daysPassed = daysBetween(startDate, date);
+
+    const initialStatuses = {
+        'A': { type: 'evening', day: 3 },
+        'B': { type: 'morning-rest', day: 1 },
+        'C': { type: 'noon', day: 5 },
+        'D': { type: 'morning', day: 1 }
+    };
+
+    let { type, day } = initialStatuses[group];
+    const cycle = 20;
+    const remain = daysPassed % cycle;
+
+    for (let i = 0; i < remain; i++) {
+        day++;
+        switch (type) {
+            case 'morning': if (day > 5) { type='morning-rest'; day=1; } break;
+            case 'morning-rest': if (day > 1) { type='noon'; day=1; } break;
+            case 'noon': if (day > 5) { type='noon-rest'; day=1; } break;
+            case 'noon-rest': if (day > 2) { type='evening'; day=1; } break;
+            case 'evening': if (day > 5) { type='evening-rest'; day=1; } break;
+            case 'evening-rest': if (day > 2) { type='morning'; day=1; } break;
+        }
+    }
+
+    const map = {
+        'morning': ['وردية أولى', 'shift-morning'],
+        'morning-rest': ['راحة بعد الوردية الأولى', 'shift-rest'],
+        'noon': ['وردية ثانية', 'shift-noon'],
+        'noon-rest': ['راحة بعد الوردية الثانية', 'shift-rest'],
+        'evening': ['وردية ثالثة', 'shift-evening'],
+        'evening-rest': ['راحة بعد الوردية الثالثة', 'shift-rest']
+    };
+
+    return {
+        description: `${map[type][0]} - اليوم ال${getNumberText(day)}`,
+        cssClass: map[type][1]
+    };
+}
+
+document.getElementById('check-btn').addEventListener('click', function () {
+    const d = document.getElementById('day').value;
+    const m = document.getElementById('month').value;
+    const y = document.getElementById('year').value;
+
+    const date = new Date(y, m - 1, d);
+    const daysAr = ["الأحد","الإثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
+    const monthsAr = [
+        "يناير","فبراير","مارس","أبريل","مايو","يونيو",
+        "يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"
+    ];
+
+    document.getElementById('date-display').textContent =
+        `${daysAr[date.getDay()]} ${d} ${monthsAr[m - 1]} ${y}`;
+
+    const groups = ['A','B','C','D'];
+    let html = '';
+
+    groups.forEach(g => {
+        const s = getGroupStatus(g, date);
+        html += `
+          <div class="shift-info ${s.cssClass}">
+            <strong>مجموعة ${g}:</strong> ${s.description}
+          </div>`;
+    });
+
+    document.getElementById('shift-results').innerHTML = html;
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>التقويم اليومي</title>
+
+<style>
+:root {
+    --primary: #1f7a4d;
+    --secondary: #caa24d;
+    --bg: #f4f7f6;
+    --card: #ffffff;
+    --text: #1f2933;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 18px;
+}
+
+/* ===== الكرت ===== */
+.calendar {
+    background: var(--card);
+    width: 100%;
+    max-width: 480px;   /* ⬅️ أكبر قليلًا */
+    border-radius: 22px;
+    padding: 24px 22px; /* ⬅️ مساحة أوسع */
+    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+    text-align: center;
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== اليوم ===== */
+.day {
+    font-size: 2.2rem;   /* ⬅️ أكبر */
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 6px;
+}
+
+.day::before {
+    content: "🕌 ";
+}
+
+/* ===== الوقت ===== */
+.time {
+    font-size: 1.15rem;  /* ⬅️ أكبر */
+    color: #475569;
+    margin-bottom: 18px;
+    font-weight: 600;
+}
+
+.time::before {
+    content: "🕰️ ";
+}
+
+/* ===== التواريخ ===== */
+.date-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;          /* ⬅️ مسافة أكبر */
+    margin-bottom: 18px;
+}
+
+.date-box {
+    background: #f9fbfa;
+    border-radius: 18px;
+    padding: 18px 14px; /* ⬅️ تكبير داخلي */
+    border: 1px solid #e5ece8;
+}
+
+.date-box h1 {
+    margin: 0;
+    font-size: 2.2rem;  /* ⬅️ أكبر */
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.date-box p {
+    margin-top: 8px;
+    font-size: 1.05rem; /* ⬅️ أكبر */
+    font-weight: 600;
+    color: #4b5563;
+}
+
+.hijri::before { content: "🌙 "; }
+.gregorian::before { content: "📅 "; }
+
+/* ===== القبطي ===== */
+.coptic-date {
+    grid-column: span 2;
+    padding: 14px;
+    border-radius: 16px;
+    background: #eef7f3;
+    color: var(--primary);
+    font-size: 1.25rem; /* ⬅️ أكبر */
+    font-weight: 700;
+    border: 1px dashed var(--secondary);
+}
+
+/* ===== الذكر ===== */
+.dhikr {
+    margin-top: 18px;
+    padding: 18px;
+    border-radius: 18px;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    font-size: 1.05rem; /* ⬅️ أكبر */
+    font-weight: 600;
+    color: #374151;
+}
+
+.dhikr::before {
+    content: "🤲 ";
+}
+
+/* ===== موبايل ===== */
+@media (max-width: 360px) {
+    .day { font-size: 1.9rem; }
+    .date-box h1 { font-size: 1.9rem; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="calendar">
+    <div class="day" id="dayName"></div>
+    <div class="time" id="currentTime"></div>
+
+    <div class="date-container">
+        <div class="date-box hijri">
+            <h1 id="hijriDay"></h1>
+            <p id="hijriMonth"></p>
+        </div>
+        <div class="date-box gregorian">
+            <h1 id="gregorianDay"></h1>
+            <p id="gregorianMonth"></p>
+        </div>
+        <div class="coptic-date" id="copticDate"></div>
+    </div>
+
+    <div class="dhikr" id="dhikr"></div>
+</div>
+
+<script>
+const days = ["الأحد","الإثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
+
+const adhkar = [
+    "سبحان الله وبحمده",
+    "لا إله إلا الله وحده لا شريك له",
+    "اللهم صل على محمد",
+    "أستغفر الله العظيم",
+    "الحمد لله رب العالمين",
+    "سبحان الله والحمد لله ولا إله إلا الله والله أكبر",
+    "لا حول ولا قوة إلا بالله"
+];
+
+const copticMonths = [
+    "توت","بابه","هاتور","كيهك","طوبة","أمشير",
+    "برمهات","برمودة","بشنس","بؤونة","أبيب","مسرى","نسيء"
+];
+
+function calculateCopticDate() {
+    const now = new Date();
+    const start = new Date(now.getFullYear(), 8, 11);
+    let diff = Math.floor((now - start) / 86400000);
+    if (diff < 0) diff += 365;
+    return `${(diff % 30) + 1} ${copticMonths[Math.floor(diff / 30)]}`;
+}
+
+let lastDhikr = "";
+
+function getRandomDhikr() {
+    let d;
+    do {
+        d = adhkar[Math.floor(Math.random() * adhkar.length)];
+    } while (d === lastDhikr);
+    lastDhikr = d;
+    return d;
+}
+
+function updateCalendar() {
+    const now = new Date();
+
+    document.getElementById("dayName").textContent = days[now.getDay()];
+
+    let timeStr = now.toLocaleTimeString("ar-EG", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true
+    }).replace("ص","صباحًا").replace("م","مساءً");
+
+    document.getElementById("currentTime").textContent = timeStr;
+
+    const g = now.toLocaleDateString("ar-EG",{day:"numeric",month:"long",year:"numeric"}).split(" ");
+    document.getElementById("gregorianDay").textContent = g[0];
+    document.getElementById("gregorianMonth").textContent = `${g[1]} ${g[2]}`;
+
+    const h = new Intl.DateTimeFormat("ar-SA-u-ca-islamic", {
+        day:"numeric",month:"long",year:"numeric"
+    }).format(now).split(" ");
+
+    document.getElementById("hijriDay").textContent = h[0];
+    document.getElementById("hijriMonth").textContent = `${h[1]} ${h[2]}`;
+
+    document.getElementById("copticDate").textContent = calculateCopticDate();
+
+    const dhikrEl = document.getElementById("dhikr");
+    if (!dhikrEl.textContent) dhikrEl.textContent = getRandomDhikr();
+}
+
+setInterval(updateCalendar, 1000);
+updateCalendar();
+
+setInterval(() => {
+    const d = document.getElementById("dhikr");
+    d.style.opacity = 0;
+    setTimeout(() => {
+        d.textContent = getRandomDhikr();
+        d.style.opacity = 1;
+    }, 400);
+}, 60000);
+</script>
+
+</body>
+</html>

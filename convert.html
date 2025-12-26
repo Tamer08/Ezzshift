@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>محول التاريخ الهجري والميلادي</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f6f6f6, #ececec);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* ===== الكرت الرئيسي ===== */
+.converter {
+  background: #ffffff;
+  padding: 32px 28px;
+  border-radius: 22px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+  max-width: 460px;
+  width: 92%;
+}
+
+/* ===== العنوان (مصغّر) ===== */
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #FEA500;
+  font-weight: 700;
+  font-size: 20px;     /* ← تصغير العنوان */
+  line-height: 1.4;
+  white-space: nowrap; /* ← سطر واحد */
+}
+
+/* ===== المدخلات ===== */
+.inputs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+select {
+  padding: 12px 10px;
+  font-size: 15px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: #fafafa;
+}
+
+select:focus {
+  outline: none;
+  border-color: #FEA500;
+  background: #fff;
+}
+
+/* ===== مفتاح التحويل ===== */
+.switch-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.mode-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: #555;
+}
+
+.switch {
+  position: relative;
+  width: 60px;
+  height: 30px;
+}
+
+.switch input {
+  opacity: 0;
+}
+
+.slider {
+  position: absolute;
+  inset: 0;
+  background: #ccc;
+  border-radius: 30px;
+  transition: 0.4s;
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  left: 3px;
+  bottom: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background: #FEA500;
+}
+
+input:checked + .slider::before {
+  transform: translateX(30px);
+}
+
+/* ===== زر التحويل ===== */
+button {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(135deg, #FEA500, #ffb733);
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* ===== النتيجة ===== */
+.result {
+  display: none;
+  margin-top: 22px;
+  padding: 16px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #7a4d00;
+  background: #fff8e6;
+  border-radius: 16px;
+  border: 1px dashed #FEA500;
+}
+
+/* ===== الفوتر ===== */
+.footer {
+  margin-top: 22px;
+  font-size: 14px;
+  color: #777;
+  text-align: center;
+}
+
+/* ===== موبايل ===== */
+@media (max-width: 480px) {
+  .inputs {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="converter">
+  <h2>محول التاريخ الهجري والميلادي</h2>
+
+  <div class="inputs">
+    <select id="day"></select>
+    <select id="month"></select>
+    <select id="year"></select>
+  </div>
+
+  <div class="switch-container">
+    <span class="mode-text" id="modeLabel">هجري → ميلادي</span>
+    <label class="switch">
+      <input type="checkbox" id="modeSwitch" onchange="toggleMode()">
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <button onclick="convertDate()">تحويل التاريخ</button>
+  <div class="result" id="result"></div>
+</div>
+
+<div class="footer">
+  نسألكم الدعاء، بارك الله فيكم وغفر لنا ولكم 🤍
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/moment-hijri.min.js"></script>
+
+<script>
+moment.locale("en");
+
+let mode = "hijri";
+
+const dayEl = document.getElementById("day");
+const monthEl = document.getElementById("month");
+const yearEl = document.getElementById("year");
+const resultEl = document.getElementById("result");
+const modeLabel = document.getElementById("modeLabel");
+
+const daysAr = {
+  Sunday: "الأحد",
+  Monday: "الإثنين",
+  Tuesday: "الثلاثاء",
+  Wednesday: "الأربعاء",
+  Thursday: "الخميس",
+  Friday: "الجمعة",
+  Saturday: "السبت"
+};
+
+const gregMonthsAr = [
+  "يناير","فبراير","مارس","أبريل","مايو","يونيو",
+  "يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"
+];
+
+const hijriMonthsAr = [
+  "محرم","صفر","ربيع الأول","ربيع الآخر",
+  "جمادى الأولى","جمادى الآخرة","رجب","شعبان",
+  "رمضان","شوال","ذو القعدة","ذو الحجة"
+];
+
+function fillSelects() {
+  dayEl.innerHTML = "";
+  for (let i = 1; i <= 31; i++) {
+    dayEl.innerHTML += `<option value="${i}">${i}</option>`;
+  }
+
+  monthEl.innerHTML = "";
+  const months = mode === "hijri" ? hijriMonthsAr : gregMonthsAr;
+  months.forEach((m, i) => {
+    monthEl.innerHTML += `<option value="${i+1}">${m}</option>`;
+  });
+
+  yearEl.innerHTML = "";
+  const now = moment();
+  const baseYear = mode === "hijri" ? now.iYear() : now.year();
+  for (let y = baseYear - 10; y <= baseYear + 20; y++) {
+    yearEl.innerHTML += `<option value="${y}">${y}</option>`;
+  }
+
+  if (mode === "hijri") {
+    dayEl.value = now.iDate();
+    monthEl.value = now.iMonth() + 1;
+    yearEl.value = now.iYear();
+  } else {
+    dayEl.value = now.date();
+    monthEl.value = now.month() + 1;
+    yearEl.value = now.year();
+  }
+}
+
+function toggleMode() {
+  mode = document.getElementById("modeSwitch").checked ? "gregorian" : "hijri";
+  modeLabel.textContent = mode === "gregorian" ? "ميلادي → هجري" : "هجري → ميلادي";
+  resultEl.style.display = "none";
+  fillSelects();
+}
+
+function convertDate() {
+  const d = dayEl.value;
+  const m = monthEl.value;
+  const y = yearEl.value;
+  let text = "";
+
+  if (mode === "hijri") {
+    const h = moment(`${y}-${m}-${d}`, "iYYYY-iM-iD");
+    const g = h.clone();
+    text = `${daysAr[g.format("dddd")]} ${g.date()} ${gregMonthsAr[g.month()]} ${g.year()}`;
+  } else {
+    const g = moment(`${y}-${m}-${d}`, "YYYY-M-D");
+    const h = g.clone();
+    text = `${daysAr[g.format("dddd")]} ${h.iDate()} ${hijriMonthsAr[h.iMonth()]} ${h.iYear()}`;
+  }
+
+  resultEl.textContent = text;
+  resultEl.style.display = "block";
+}
+
+fillSelects();
+</script>
+
+</body>
+</html>
