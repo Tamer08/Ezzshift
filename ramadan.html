@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إمساكية رمضان 1447</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Tahoma,Arial;background:#fff;color:#000}
+.container{padding:15px;max-width:500px;margin:auto}
+.header{text-align:center;margin-bottom:15px}
+.header h1{margin:0;font-size:26px;font-weight:800;color:#FEA500}
+.header p{margin-top:5px;color:#666}
+
+.days-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:20px}
+.day-cell{
+ position:relative;background:#F6F6F6;border:1.5px solid #F0C36D;
+ border-radius:10px;padding:12px 0 10px;text-align:center;
+ font-weight:bold;cursor:pointer;user-select:none
+}
+.day-cell.active,.day-cell:hover{background:#FEA500;color:#fff;border-color:#FEA500}
+
+.today-badge-grid{
+ position:absolute;top:-8px;right:6px;background:#FEA500;
+ color:#fff;font-size:10px;padding:2px 6px;border-radius:10px
+}
+.today-dot{
+ width:6px;height:6px;background:#FEA500;border-radius:50%;
+ margin:6px auto 0;animation:pulse 1.6s infinite
+}
+@keyframes pulse{
+ 0%{transform:scale(1)}
+ 50%{transform:scale(1.4);opacity:.6}
+ 100%{transform:scale(1)}
+}
+
+.day-card{
+ position:relative;background:#FFF4DD;border:2px solid #FEA500;
+ border-radius:20px;padding:20px;margin-bottom:18px
+}
+.today-badge{
+ position:absolute;top:-10px;right:16px;background:#FEA500;
+ color:#fff;font-size:12px;padding:4px 10px;border-radius:12px
+}
+.day-title{text-align:center;font-weight:bold;color:#FEA500;margin-bottom:12px;font-size:15px}
+
+.times{display:flex;gap:10px}
+.time-box{
+ flex:1;background:#fff;border-radius:12px;padding:10px 6px;
+ text-align:center;border:1px solid #F0C36D
+}
+.time-box.maghrib{background:#F2F2F2;border-color:#FEA500}
+.time-box div:first-child{font-size:13px;font-weight:800;color:#FEA500;margin-bottom:4px}
+.time-box div:last-child{font-size:15px;font-weight:bold}
+
+.footer{text-align:center;font-size:13px;color:#666}
+</style>
+</head>
+
+<body>
+<div class="container">
+  <div class="header">
+    <h1>🌙 إمساكية رمضان 1447 هـ</h1>
+    <p>اختر يومًا من الأيام</p>
+  </div>
+
+  <div class="days-grid" id="daysGrid"></div>
+  <div id="cardContainer"></div>
+  <div class="footer" id="location"></div>
+</div>
+
+<script>
+/* ========= الإعدادات ========= */
+const city="Cairo";
+const country="Egypt";
+const hijriYear=1447;
+const ramadanMonth=9;
+const STORAGE_KEY="ramadan_1447_cairo";
+
+const monthsAr=[
+ "يناير","فبراير","مارس","أبريل","مايو","يونيو",
+ "يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"
+];
+
+/* ========= تحويل الوقت (تصحيح NaN) ========= */
+function to12(time){
+ if(!time) return "--:--";
+ time=time.split(" ")[0]; // إزالة (EET)
+ let [h,m]=time.split(":").map(Number);
+ if(isNaN(h)||isNaN(m)) return "--:--";
+ const p=h>=12?"م":"ص";
+ h=h%12||12;
+ return `${h}:${m.toString().padStart(2,"0")} ${p}`;
+}
+
+/* ========= العرض ========= */
+function render(days){
+ const grid=document.getElementById("daysGrid");
+ const card=document.getElementById("cardContainer");
+ const todayStr=new Date().toDateString();
+ grid.innerHTML="";
+
+ document.getElementById("location").innerText=
+  `التوقيت المحلي — ${city}, ${country}`;
+
+ days.forEach(d=>{
+  const g=d.date.gregorian;
+  const isToday=new Date(g.date).toDateString()===todayStr;
+
+  const cell=document.createElement("div");
+  cell.className="day-cell"+(isToday?" active":"");
+  cell.innerHTML=`
+   ${isToday?`<div class="today-badge-grid">اليوم</div>`:""}
+   ${d.date.hijri.day}
+   ${isToday?`<div class="today-dot"></div>`:""}
+  `;
+
+  cell.onclick=()=>{
+   document.querySelectorAll(".day-cell")
+    .forEach(c=>c.classList.remove("active"));
+   cell.classList.add("active");
+
+   const formattedGregorian=
+    `${g.day} ${monthsAr[g.month.number-1]} ${g.year}`;
+
+   card.innerHTML=`
+    <div class="day-card">
+     ${isToday?`<div class="today-badge">اليوم</div>`:""}
+     <div class="day-title">
+      ${d.date.hijri.weekday.ar} —
+      ${formattedGregorian} —
+      ${d.date.hijri.day} رمضان
+     </div>
+
+     <div class="times">
+      <div class="time-box">
+       <div>الإمساك</div>
+       <div>${to12(d.timings.Imsak)}</div>
+      </div>
+      <div class="time-box">
+       <div>الفجر</div>
+       <div>${to12(d.timings.Fajr)}</div>
+      </div>
+      <div class="time-box maghrib">
+       <div>المغرب</div>
+       <div>${to12(d.timings.Maghrib)}</div>
+      </div>
+     </div>
+    </div>
+   `;
+  };
+
+  grid.appendChild(cell);
+  if(isToday) cell.click();
+ });
+}
+
+/* ========= تحميل البيانات (أونلاين / أوفلاين) ========= */
+function loadData(){
+ const cached=localStorage.getItem(STORAGE_KEY);
+ if(cached){
+  render(JSON.parse(cached));
+  return;
+ }
+
+ fetch(`https://api.aladhan.com/v1/hijriCalendarByCity?city=${city}&country=${country}&month=${ramadanMonth}&year=${hijriYear}&method=5`)
+  .then(r=>r.json())
+  .then(j=>{
+   localStorage.setItem(STORAGE_KEY,JSON.stringify(j.data));
+   render(j.data);
+  })
+  .catch(()=>{
+   document.getElementById("cardContainer").innerHTML=
+    "<p style='text-align:center;color:red'>لا يوجد إنترنت ولا بيانات محفوظة</p>";
+  });
+}
+
+loadData();
+</script>
+
+</body>
+</html>
