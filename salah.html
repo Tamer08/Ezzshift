@@ -14,7 +14,52 @@ body{margin:0;font-family:Tahoma,Arial;background:#fff;color:#000}
  padding:20px;border:1px solid #D0D0D0;box-shadow:0 8px 20px rgba(0,0,0,.12)
 }
 h1{text-align:center;font-size:24px;margin:0 0 10px;color:#D48B00;font-weight:800}
-.countdown{text-align:center;font-size:17px;margin-bottom:15px;color:#FEA500;font-weight:bold}
+
+/* ===== ساعة احترافية متناسقة ===== */
+.countdown{
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ gap:12px;
+ margin-bottom:15px;
+ font-family:'Tahoma',Arial
+}
+.next-prayer{
+ font-size:16px;
+ font-weight:bold;
+ color:#D48B00
+}
+.led{
+ display:flex;
+ gap:8px;
+ background:#f7f7f7;
+ padding:6px 12px;
+ border-radius:10px;
+ border:1px solid #d6d6d6;
+ box-shadow:inset 0 0 6px rgba(0,0,0,.08)
+}
+.unit{
+ display:flex;
+ align-items:baseline;
+ gap:3px
+}
+.unit span{
+ font-size:17px;
+ font-weight:bold;
+ color:#333;
+ min-width:22px;
+ text-align:center
+}
+.unit small{
+ font-size:11px;
+ color:#888
+}
+.sep{
+ font-weight:bold;
+ color:#aaa;
+ padding:0 2px
+}
+
 .prayer{
  display:flex;justify-content:space-between;align-items:center;
  padding:14px;margin-bottom:10px;background:#fff;border-radius:14px;
@@ -22,6 +67,7 @@ h1{text-align:center;font-size:24px;margin:0 0 10px;color:#D48B00;font-weight:80
 }
 .prayer span:last-child{font-weight:bold}
 .prayer.active{background:#FEA500;color:#fff;border-color:#FEA500}
+
 .footer{text-align:center;margin-top:12px;font-size:14px;color:#666}
 </style>
 </head>
@@ -31,19 +77,19 @@ h1{text-align:center;font-size:24px;margin:0 0 10px;color:#D48B00;font-weight:80
 <div class="container">
   <div class="card">
     <h1>🕌 أوقات الصلاة</h1>
+
     <div class="countdown" id="countdown">جاري التحميل...</div>
+
     <div id="prayers"></div>
     <div class="footer" id="location"></div>
   </div>
 </div>
 
 <script>
-/* ================== الإعدادات ================== */
 const city="Cairo";
 const country="Egypt";
 const STORAGE_KEY="prayer_times_cairo";
 
-/* ================== ترتيب الصلوات ================== */
 const prayerOrder=[
  {key:"Fajr",name:"الفجر"},
  {key:"Sunrise",name:"الشروق"},
@@ -55,10 +101,16 @@ const prayerOrder=[
 
 let prayerTimes={};
 
-/* ================== أدوات ================== */
+function getArabicDate(){
+ const days=["الأحد","الإثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
+ const months=["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
+ const now=new Date();
+ return `${days[now.getDay()]} ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+}
+
 function cleanTime(t){
  if(!t) return null;
- return t.split(" ")[0]; // إزالة (EET)
+ return t.split(" ")[0];
 }
 
 function to12(t){
@@ -70,7 +122,6 @@ function to12(t){
  return `${h}:${m.toString().padStart(2,"0")} ${p}`;
 }
 
-/* ================== العرض ================== */
 function renderPrayers(active=null){
  const box=document.getElementById("prayers");
  box.innerHTML="";
@@ -107,22 +158,30 @@ function updateCountdown(){
  }
 
  const diff=nextTime-now;
- const h=Math.floor(diff/3600000);
- const m=Math.floor(diff%3600000/60000);
- const s=Math.floor(diff%60000/1000);
+ const h=String(Math.floor(diff/3600000)).padStart(2,"0");
+ const m=String(Math.floor(diff%3600000/60000)).padStart(2,"0");
+ const s=String(Math.floor(diff%60000/1000)).padStart(2,"0");
 
- document.getElementById("countdown").innerText=
-  `الصلاة القادمة: ${nextPrayer.name} بعد ${h}س ${m}د ${s}ث`;
+ document.getElementById("countdown").innerHTML=`
+  <div class="next-prayer">${nextPrayer.name}</div>
+  <div class="led">
+    <div class="unit"><span>${h}</span><small>س</small></div>
+    <div class="sep">:</div>
+    <div class="unit"><span>${m}</span><small>د</small></div>
+    <div class="sep">:</div>
+    <div class="unit"><span>${s}</span><small>ث</small></div>
+  </div>
+ `;
 
  renderPrayers(nextPrayer.key);
 }
 
-/* ================== تحميل البيانات (أونلاين / أوفلاين) ================== */
 function load(){
  const cached=localStorage.getItem(STORAGE_KEY);
  if(cached){
   prayerTimes=JSON.parse(cached);
-  document.getElementById("location").innerText=`توقيت ${city} - ${country}`;
+  document.getElementById("location").innerHTML=
+   `توقيت ${city} - ${country}<br>${getArabicDate()}`;
   renderPrayers();
   updateCountdown();
   setInterval(updateCountdown,1000);
@@ -134,34 +193,15 @@ function load(){
   .then(j=>{
    prayerTimes=j.data.timings;
    localStorage.setItem(STORAGE_KEY,JSON.stringify(prayerTimes));
-   document.getElementById("location").innerText=`توقيت ${city} - ${country}`;
+   document.getElementById("location").innerHTML=
+    `توقيت ${city} - ${country}<br>${getArabicDate()}`;
    renderPrayers();
    updateCountdown();
    setInterval(updateCountdown,1000);
-  })
-  .catch(()=>{
-   document.getElementById("countdown").innerText="لا يوجد إنترنت ولا بيانات محفوظة";
   });
 }
 
 load();
-
-/* ================== Service Worker داخلي ================== */
-if("serviceWorker"in navigator){
- const swCode=`
-  self.addEventListener("fetch",e=>{
-   e.respondWith(
-    fetch(e.request).then(res=>{
-     const r=res.clone();
-     caches.open("prayer-cache").then(c=>c.put(e.request,r));
-     return res;
-    }).catch(()=>caches.match(e.request))
-   );
-  });
- `;
- const blob=new Blob([swCode],{type:"text/javascript"});
- navigator.serviceWorker.register(URL.createObjectURL(blob));
-}
 </script>
 
 </body>
