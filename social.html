@@ -13,11 +13,9 @@ body{
   font-family: Arial, sans-serif;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  /* منع تحديد النصوص لتسريع التفاعل */
+  /* منع تحديد النصوص عند تكرار الضغط */
   -webkit-user-select: none;
   user-select: none;
-  /* تحسين استجابة اللمس للصفحة كاملة */
-  touch-action: manipulation;
 }
 
 table{
@@ -42,18 +40,22 @@ td{
   cursor:pointer;
   padding-top: 10px;
   
-  /* إزالة لون التظليل الرمادي */
+  /* تحسين استجابة اللمس */
+  touch-action: manipulation;
+  
+  /* إزالة لون التظليل الرمادي تماماً */
   -webkit-tap-highlight-color: transparent;
   
-  /* الحركة ناعمة فقط عند "رفع" الإصبع (العودة للأعلى) */
-  transition: transform 0.1s ease-out;
+  /* نعومة الحركة عند الرجوع للأعلى (ترك الزر) */
+  transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* حالة الضغط: استجابة فورية بدون أي تأخير */
+/* تأثير الضغط: النزول للأسفل */
 .item:active{
+  /* الرقم 6px يحدد مسافة النزول */
   transform: translateY(6px);
-  /* إلغاء الأنيميشن عند الضغط ليكون الهبوط فورياً */
-  transition: none; 
+  /* سرعة النزول فورية لتعطي شعور المفتاح الحقيقي */
+  transition: transform 0.05s ease-in;
 }
 
 .icon{
@@ -65,13 +67,14 @@ td{
   display:flex;
   align-items:center;
   justify-content:center;
+  /* إضافة ظل خفيف للأيقونة لتعزيز شعور الارتفاع */
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  transition: box-shadow 0.1s;
+  transition: box-shadow 0.15s;
 }
 
+/* عند الضغط، نقلل الظل ليبدو وكأنه اقترب من السطح */
 .item:active .icon {
   box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-  transition: none; /* إزالة التأخير في الظل أيضاً */
 }
 
 .icon svg{
@@ -173,7 +176,6 @@ td{
 
 <script>
 function openPage(name){
-  // الانتقال المباشر بدون أي انتظار
   window.location.href = "open://" + name;
 }
 </script>
