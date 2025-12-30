@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>جدول الوردية الشهرية - ٢٩‏/١٢‏/٢٠٢٥</title>
+    <title>جدول الوردية الشهرية - ٣٠‏/١٢‏/٢٠٢٥</title>
     <style>
         * {
             margin: 0;
@@ -216,11 +216,21 @@
                 font-size: 9px !important; /* تم تصغير الخط من 10 إلى 9 */
             }
             
+            /* 
+             * هنا التعديل الوحيد للملف المصدر:
+             * استخدام vw للرأس فقط لضمان عدم اختفاء النص مع الخطوط الكبيرة
+             */
+            thead th {
+                white-space: nowrap !important; /* يمنع نزول النص لسطر ثاني */
+                font-size: 2.8vw !important; /* حجم يعتمد على عرض الشاشة */
+                padding: 2px 0 !important;
+            }
+
             /* تكبير النصوص في رأس الجدول للأعمدة 4 و 5 و 6 للشاشات الصغيرة */
             th:nth-child(4),
             th:nth-child(5),
             th:nth-child(6) {
-                font-size: 10px !important;
+                font-size: 3.5vw !important; /* حجم نسبي أكبر */
                 font-weight: bold !important;
             }
         }
