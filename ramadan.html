@@ -55,6 +55,38 @@ body{margin:0;font-family:Tahoma,Arial;background:#fff;color:#000}
 .time-box div:last-child{font-size:15px;font-weight:bold}
 
 .footer{text-align:center;font-size:13px;color:#666}
+
+/* ===== التعديل الخاص بالموبايل ===== */
+@media screen and (max-width: 768px) {
+    /* العنوان الرئيسي */
+    .header h1 {
+        white-space: nowrap;
+        font-size: 6.5vw !important;
+    }
+
+    /* تفاصيل اليوم داخل البطاقة (اليوم - التاريخ - رقم رمضان) */
+    .day-title {
+        white-space: nowrap;
+        font-size: 3.5vw !important; /* حجم صغير نسبياً ليسع النص الطويل */
+    }
+
+    /* عناوين الأوقات (إمساك، فجر، مغرب) */
+    .time-box div:first-child {
+        white-space: nowrap;
+        font-size: 3.5vw !important;
+    }
+
+    /* قيم الوقت (الساعة) */
+    .time-box div:last-child {
+        white-space: nowrap;
+        font-size: 4.5vw !important;
+    }
+    
+    /* منع التفاف صناديق الوقت */
+    .times {
+        flex-wrap: nowrap;
+    }
+}
 </style>
 </head>
 

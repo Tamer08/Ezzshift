@@ -69,6 +69,43 @@ h1{text-align:center;font-size:24px;margin:0 0 10px;color:#D48B00;font-weight:80
 .prayer.active{background:#FEA500;color:#fff;border-color:#FEA500}
 
 .footer{text-align:center;margin-top:12px;font-size:14px;color:#666}
+
+/* ================== التعديل الخاص بالموبايل ================== */
+@media screen and (max-width: 768px) {
+    /* العنوان الرئيسي */
+    h1 {
+        white-space: nowrap;
+        font-size: 7vw !important;
+    }
+
+    /* اسم الصلاة القادمة في العداد */
+    .next-prayer {
+        white-space: nowrap;
+        font-size: 4.5vw !important;
+    }
+
+    /* أرقام العداد (ساعات، دقائق، ثواني) */
+    .unit span {
+        font-size: 5.5vw !important;
+    }
+    
+    /* النصوص الصغيرة في العداد (س، د، ث) */
+    .unit small {
+        font-size: 3vw !important;
+    }
+
+    /* أسماء الصلوات وأوقاتها في القائمة */
+    .prayer span {
+        white-space: nowrap;
+        font-size: 4.5vw !important;
+    }
+
+    /* الفوتر (التاريخ والموقع) */
+    .footer {
+        white-space: nowrap;
+        font-size: 3.5vw !important;
+    }
+}
 </style>
 </head>
 

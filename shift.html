@@ -127,10 +127,32 @@ button:hover {
 .shift-evening { border-color: #ff7a00; }
 .shift-rest    { border-color: #bfbfbf; }
 
-/* ===== موبايل ===== */
-@media (max-width: 360px) {
-    h1 { font-size: 18px; }
-    .date-display { font-size: 14px; }
+/* ===== موبايل (التعديل الجديد) ===== */
+@media screen and (max-width: 768px) {
+    /* العنوان الرئيسي */
+    h1 {
+        white-space: nowrap;
+        font-size: 6vw !important;
+    }
+
+    /* التاريخ المعروض */
+    .date-display {
+        white-space: nowrap;
+        font-size: 5vw !important;
+    }
+
+    /* تفاصيل الوردية (أهم جزء لمنع التكسر) */
+    .shift-info {
+        white-space: nowrap;
+        font-size: 3.8vw !important;
+        padding: 12px 8px; /* تقليل الهوامش الجانبية قليلاً */
+    }
+
+    /* الزر والقوائم المنسدلة */
+    button, select {
+        white-space: nowrap;
+        font-size: 4vw !important;
+    }
 }
 </style>
 </head>

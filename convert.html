@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>محول التاريخ الهجري والميلادي</title>
 
 <style>
@@ -16,10 +16,12 @@ body {
   min-height: 100vh;
   background: linear-gradient(135deg, #f6f6f6, #ececec);
   display: flex;
-  justify-content: flex-start;   /* ⬅️ بدل center */
+  justify-content: flex-start;
   align-items: center;
   flex-direction: column;
-  padding-top: 40px;              /* ⬅️ مسافة بسيطة من فوق */
+  padding-top: 40px;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 /* ===== الكرت الرئيسي ===== */
@@ -38,9 +40,10 @@ h2 {
   margin-bottom: 20px;
   color: #FEA500;
   font-weight: 700;
-  font-size: 20px;     /* ← تصغير العنوان */
+  font-size: 20px;
   line-height: 1.4;
-  white-space: nowrap; /* ← سطر واحد */
+  white-space: nowrap !important;
+  overflow: visible !important;
 }
 
 /* ===== المدخلات ===== */
@@ -149,6 +152,9 @@ button:hover {
   background: #fff8e6;
   border-radius: 16px;
   border: 1px dashed #FEA500;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  width: 100%;
 }
 
 /* ===== الفوتر ===== */

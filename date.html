@@ -25,17 +25,17 @@ body {
     background: var(--bg);
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* ⬅️ بدل center */
-    padding: 40px 18px 18px 18px; /* ⬅️ 8px من فوق */
+    align-items: flex-start; /* ⬅️ كما في الكود الأصلي */
+    padding: 40px 18px 18px 18px; /* ⬅️ كما في الكود الأصلي */
 }
 
 /* ===== الكرت ===== */
 .calendar {
     background: var(--card);
     width: 100%;
-    max-width: 480px;   /* ⬅️ أكبر قليلًا */
+    max-width: 480px;
     border-radius: 22px;
-    padding: 24px 22px; /* ⬅️ مساحة أوسع */
+    padding: 24px 22px;
     box-shadow: 0 12px 30px rgba(0,0,0,0.12);
     text-align: center;
     animation: fadeIn 0.4s ease;
@@ -48,7 +48,7 @@ body {
 
 /* ===== اليوم ===== */
 .day {
-    font-size: 2.2rem;   /* ⬅️ أكبر */
+    font-size: 2.2rem;
     font-weight: 800;
     color: var(--primary);
     margin-bottom: 6px;
@@ -60,7 +60,7 @@ body {
 
 /* ===== الوقت ===== */
 .time {
-    font-size: 1.15rem;  /* ⬅️ أكبر */
+    font-size: 1.15rem;
     color: #475569;
     margin-bottom: 18px;
     font-weight: 600;
@@ -74,27 +74,27 @@ body {
 .date-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 14px;          /* ⬅️ مسافة أكبر */
+    gap: 14px;
     margin-bottom: 18px;
 }
 
 .date-box {
     background: #f9fbfa;
     border-radius: 18px;
-    padding: 18px 14px; /* ⬅️ تكبير داخلي */
+    padding: 18px 14px;
     border: 1px solid #e5ece8;
 }
 
 .date-box h1 {
     margin: 0;
-    font-size: 2.2rem;  /* ⬅️ أكبر */
+    font-size: 2.2rem;
     font-weight: 800;
     color: var(--primary);
 }
 
 .date-box p {
     margin-top: 8px;
-    font-size: 1.05rem; /* ⬅️ أكبر */
+    font-size: 1.05rem;
     font-weight: 600;
     color: #4b5563;
 }
@@ -109,7 +109,7 @@ body {
     border-radius: 16px;
     background: #eef7f3;
     color: var(--primary);
-    font-size: 1.25rem; /* ⬅️ أكبر */
+    font-size: 1.25rem;
     font-weight: 700;
     border: 1px dashed var(--secondary);
 }
@@ -121,7 +121,7 @@ body {
     border-radius: 18px;
     background: #f8fafc;
     border: 1px solid #e5e7eb;
-    font-size: 1.05rem; /* ⬅️ أكبر */
+    font-size: 1.05rem;
     font-weight: 600;
     color: #374151;
 }
@@ -130,10 +130,40 @@ body {
     content: "🤲 ";
 }
 
-/* ===== موبايل ===== */
-@media (max-width: 360px) {
-    .day { font-size: 1.9rem; }
-    .date-box h1 { font-size: 1.9rem; }
+/* ===== موبايل (التعديل الوحيد هنا) ===== */
+@media screen and (max-width: 768px) {
+    /* تطبيق white-space: nowrap لمنع النزول لسطر جديد */
+    /* استخدام vw لجعل الخط نسبي لعرض الشاشة بغض النظر عن إعدادات النظام */
+    
+    .day {
+        white-space: nowrap;
+        font-size: 10vw !important; /* حجم متجاوب لليوم */
+    }
+    
+    .time {
+        white-space: nowrap;
+        font-size: 5vw !important; /* حجم متجاوب للوقت */
+    }
+
+    .date-box h1 {
+        white-space: nowrap;
+        font-size: 11vw !important; /* حجم متجاوب لأرقام التاريخ */
+    }
+
+    .date-box p {
+        white-space: nowrap;
+        font-size: 4vw !important; /* حجم متجاوب للشهر والسنة */
+    }
+
+    .coptic-date {
+        white-space: nowrap;
+        font-size: 5vw !important; /* حجم متجاوب للتاريخ القبطي */
+    }
+    
+    .dhikr {
+        /* الذكر نتركه يلتف لأنه جملة طويلة، لكن نضبط حجمه */
+        font-size: 4.5vw !important; 
+    }
 }
 </style>
 </head>
