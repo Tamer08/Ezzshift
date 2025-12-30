@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes">
     <title>جدول الوردية الشهرية - ٣٠‏/١٢‏/٢٠٢٥</title>
     <style>
         * {
@@ -68,13 +68,14 @@
             background-color: #2c5f5f !important;
             color: white !important;
             font-weight: 900;
+            font-size: 10px !important;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
             
-            /* --- التعديلات: تصغير الخط قليلاً + منع التكسر --- */
+            /* --- التعديلات للملف المصدر: تصغير الخط قليلاً + منع التكسر --- */
             white-space: nowrap !important; 
-            font-size: 10px !important;
+            font-size: 2.0vw !important; /* حجم الخط في العناوين */
             padding: 4px !important;
         }
         
@@ -128,7 +129,7 @@
         }
         
         @media print {
-            body { margin: 0 !important; padding: 3px !important; overflow: hidden !important; }
+            body { margin: 0 !important; padding: 3px !important; height: 100vh !important; width: 100vw !important; overflow: hidden !important; }
             .container { height: 100vh !important; width: 100vw !important; }
             .table-wrapper { height: 100vh !important; }
             table { font-size: 7px !important; height: 100% !important; }
@@ -147,27 +148,27 @@
                 padding: 0.5px !important;
             }
             
-            /* تم تصغير الخطوط هنا كما طلبت */
+            /* تصغير الخط في العناوين (المناسبات، التاريخ...) */
             thead th {
                 white-space: nowrap !important; 
-                font-size: 2.2vw !important; /* كان 2.8vw */
+                font-size: 2.0vw !important; /* حجم صغير ومناسب */
                 padding: 2px 0 !important;
             }
 
-            /* تكبير خاص للأعمدة 4 و 5 و 6 لكن أصغر من السابق */
+            /* تصغير خط عناوين الورديات (الأولى، الثانية...) */
             th:nth-child(4),
             th:nth-child(5),
             th:nth-child(6) {
-                font-size: 2.8vw !important; /* كان 3.5vw */
+                font-size: 2.5vw !important; /* حجم صغير ومناسب */
                 font-weight: bold !important;
             }
 
             td:nth-child(1) { font-size: 9px !important; }
 
-            /* تكبير أيام الأسبوع والتواريخ في الموبايل - تعديل الحجم */
+            /* تعديل الأيام والتواريخ (تصغير قليلاً وتخفيف البولد قليلاً) */
             td:nth-child(2), td:nth-child(3) {
-                font-size: 2.8vw !important; /* تم التصغير من 3.5 إلى 2.8 */
-                font-weight: 900 !important; /* بولد سميك */
+                font-size: 2.5vw !important; /* أصغر قليلاً */
+                font-weight: 700 !important; /* بولد عادي وليس سميك جداً */
             }
         }
         
@@ -427,31 +428,31 @@
                         <td class="color-a">A</td>
                         <td class="color-b">B</td>
                     </tr>
-                    <tr>
+                    
+                    
+                    
+                <tr>
                         <td class="empty-cell"></td>
                         <td class="date-column">29</td>
                         <td class="day-column">الأحد</td>
                         <td class="color-c">C</td>
                         <td class="color-a">A</td>
                         <td class="color-b">B</td>
-                    </tr>
-                    <tr>
+                    </tr><tr>
                         <td class="empty-cell"></td>
                         <td class="date-column">30</td>
                         <td class="day-column">الإثنين</td>
                         <td class="color-c">C</td>
                         <td class="color-a">A</td>
                         <td class="color-d">D</td>
-                    </tr>
-                    <tr>
+                    </tr><tr>
                         <td class="empty-cell"></td>
                         <td class="date-column">31</td>
                         <td class="day-column">الثلاثاء</td>
                         <td class="color-c">C</td>
                         <td class="color-a">A</td>
                         <td class="color-d">D</td>
-                    </tr>
-                </tbody>
+                    </tr></tbody>
             </table>
         </div>
     </div>

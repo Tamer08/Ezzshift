@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes">
     <title>جدول الوردية الشهرية - ٣٠‏/١٢‏/٢٠٢٥</title>
     <style>
         * {
@@ -68,13 +68,14 @@
             background-color: #2c5f5f !important;
             color: white !important;
             font-weight: 900;
+            font-size: 10px !important;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
             
-            /* --- التعديلات: تصغير الخط قليلاً + منع التكسر --- */
+            /* --- التعديلات للملف المصدر: تصغير الخط قليلاً + منع التكسر --- */
             white-space: nowrap !important; 
-            font-size: 2.0vw !important; /* تصغير الخط في العناوين */
+            font-size: 2.0vw !important; /* حجم الخط في العناوين */
             padding: 4px !important;
         }
         
@@ -128,7 +129,7 @@
         }
         
         @media print {
-            body { margin: 0 !important; padding: 3px !important; overflow: hidden !important; }
+            body { margin: 0 !important; padding: 3px !important; height: 100vh !important; width: 100vw !important; overflow: hidden !important; }
             .container { height: 100vh !important; width: 100vw !important; }
             .table-wrapper { height: 100vh !important; }
             table { font-size: 7px !important; height: 100% !important; }
@@ -147,27 +148,27 @@
                 padding: 0.5px !important;
             }
             
-            /* تم تصغير الخطوط هنا كما طلبت */
+            /* تصغير الخط في العناوين (المناسبات، التاريخ...) */
             thead th {
                 white-space: nowrap !important; 
-                font-size: 2.0vw !important; /* تم التصغير */
+                font-size: 2.0vw !important; /* حجم صغير ومناسب */
                 padding: 2px 0 !important;
             }
 
-            /* تكبير خاص للأعمدة 4 و 5 و 6 لكن أصغر من السابق */
+            /* تصغير خط عناوين الورديات (الأولى، الثانية...) */
             th:nth-child(4),
             th:nth-child(5),
             th:nth-child(6) {
-                font-size: 2.5vw !important; /* تم التصغير */
+                font-size: 2.5vw !important; /* حجم صغير ومناسب */
                 font-weight: bold !important;
             }
 
             td:nth-child(1) { font-size: 9px !important; }
 
-            /* تكبير أيام الأسبوع والتواريخ في الموبايل - تعديل الحجم */
+            /* تعديل الأيام والتواريخ (تصغير قليلاً وتخفيف البولد قليلاً) */
             td:nth-child(2), td:nth-child(3) {
-                font-size: 2.5vw !important; /* تم التصغير من 2.8 إلى 2.5 */
-                font-weight: 700 !important; /* تخفيف البولد من 900 إلى 700 */
+                font-size: 2.5vw !important; /* أصغر قليلاً */
+                font-weight: 700 !important; /* بولد عادي وليس سميك جداً */
             }
         }
         
@@ -204,9 +205,9 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="occasion-column" style="transition: 0.3s;"><br></td>
-                        <td class="date-column" style="transition: 0.3s;">1</td>
-                        <td class="day-column">السبت</td>
+                        <td class="occasion-column" style="transition: 0.3s; background-color: rgb(239, 239, 239);"><br></td>
+                        <td class="date-column" style="transition: 0.3s; background-color: rgb(239, 239, 239);">1</td>
+                        <td class="day-column" style="background-color: rgb(239, 239, 239);">الأربعاء</td>
                         <td class="color-a">A</td>
                         <td class="color-d">D</td>
                         <td class="color-c">C</td>
@@ -214,7 +215,7 @@
                     <tr>
                         <td class="empty-cell"></td>
                         <td class="date-column">2</td>
-                        <td class="day-column">الأحد</td>
+                        <td class="day-column">الخميس</td>
                         <td class="color-a">A</td>
                         <td class="color-d">D</td>
                         <td class="color-c">C</td>
@@ -222,7 +223,7 @@
                     <tr>
                         <td class="empty-cell"></td>
                         <td class="date-column">3</td>
-                        <td class="day-column">الإثنين</td>
+                        <td class="day-column">الجمعة</td>
                         <td class="color-a">A</td>
                         <td class="color-d">D</td>
                         <td class="color-b">B</td>
@@ -230,7 +231,7 @@
                     <tr>
                         <td class="empty-cell"></td>
                         <td class="date-column">4</td>
-                        <td class="day-column">الثلاثاء</td>
+                        <td class="day-column">السبت</td>
                         <td class="color-a">A</td>
                         <td class="color-d">D</td>
                         <td class="color-b">B</td>
@@ -238,7 +239,7 @@
                     <tr>
                         <td class="empty-cell"></td>
                         <td class="date-column">5</td>
-                        <td class="day-column">الأربعاء</td>
+                        <td class="day-column">الأحد</td>
                         <td class="color-c">C</td>
                         <td class="color-d">D</td>
                         <td class="color-b">B</td>
@@ -246,7 +247,7 @@
                     <tr>
                         <td class="empty-cell"></td>
                         <td class="date-column">6</td>
-                        <td class="day-column">الخميس</td>
+                        <td class="day-column">الإثنين</td>
                         <td class="color-c">C</td>
                         <td class="color-a">A</td>
                         <td class="color-b">B</td>
@@ -254,7 +255,7 @@
                     <tr>
                         <td class="empty-cell"></td>
                         <td class="date-column">7</td>
-                        <td class="day-column">الجمعة</td>
+                        <td class="day-column">الثلاثاء</td>
                         <td class="color-c">C</td>
                         <td class="color-a">A</td>
                         <td class="color-b">B</td>
@@ -262,7 +263,7 @@
                     <tr>
                         <td class="empty-cell"></td>
                         <td class="date-column">8</td>
-                        <td class="day-column">السبت</td>
+                        <td class="day-column">الأربعاء</td>
                         <td class="color-c">C</td>
                         <td class="color-a">A</td>
                         <td class="color-d">D</td>
@@ -270,7 +271,7 @@
                     <tr>
                         <td class="empty-cell"></td>
                         <td class="date-column">9</td>
-                        <td class="day-column">الأحد</td>
+                        <td class="day-column">الخميس</td>
                         <td class="color-c">C</td>
                         <td class="color-a">A</td>
                         <td class="color-d">D</td>
@@ -278,7 +279,7 @@
                     <tr>
                         <td class="empty-cell"></td>
                         <td class="date-column">10</td>
-                        <td class="day-column">الإثنين</td>
+                        <td class="day-column">الجمعة</td>
                         <td class="color-b">B</td>
                         <td class="color-a">A</td>
                         <td class="color-d">D</td>
@@ -286,7 +287,7 @@
                     <tr>
                         <td class="empty-cell"></td>
                         <td class="date-column">11</td>
-                        <td class="day-column">الثلاثاء</td>
+                        <td class="day-column">السبت</td>
                         <td class="color-b">B</td>
                         <td class="color-c">C</td>
                         <td class="color-d">D</td>
@@ -294,15 +295,15 @@
                     <tr>
                         <td class="empty-cell"></td>
                         <td class="date-column">12</td>
-                        <td class="day-column">الأربعاء</td>
+                        <td class="day-column">الأحد</td>
                         <td class="color-b">B</td>
                         <td class="color-c">C</td>
                         <td class="color-d">D</td>
                     </tr>
                     <tr>
-                        <td class="empty-cell"></td>
-                        <td class="date-column">13</td>
-                        <td class="day-column">الخميس</td>
+                        <td class="empty-cell" style="background-color: rgb(249, 249, 249);"><br></td>
+                        <td class="date-column" style="background-color: rgb(239, 239, 239);">13</td>
+                        <td class="day-column" style="background-color: rgb(239, 239, 239);">الإثنين</td>
                         <td class="color-b">B</td>
                         <td class="color-c">C</td>
                         <td class="color-a">A</td>
@@ -310,7 +311,7 @@
                     <tr>
                         <td class="empty-cell"></td>
                         <td class="date-column">14</td>
-                        <td class="day-column">الجمعة</td>
+                        <td class="day-column">الثلاثاء</td>
                         <td class="color-b">B</td>
                         <td class="color-c">C</td>
                         <td class="color-a">A</td>
@@ -318,7 +319,7 @@
                     <tr>
                         <td class="empty-cell"></td>
                         <td class="date-column">15</td>
-                        <td class="day-column">السبت</td>
+                        <td class="day-column">الأربعاء</td>
                         <td class="color-d">D</td>
                         <td class="color-c">C</td>
                         <td class="color-a">A</td>
@@ -326,15 +327,15 @@
                     <tr>
                         <td class="empty-cell"></td>
                         <td class="date-column">16</td>
-                        <td class="day-column">الأحد</td>
+                        <td class="day-column">الخميس</td>
                         <td class="color-d">D</td>
                         <td class="color-b">B</td>
                         <td class="color-a">A</td>
                     </tr>
                     <tr>
-                        <td class="empty-cell"></td>
-                        <td class="date-column">17</td>
-                        <td class="day-column">الإثنين</td>
+                        <td class="empty-cell" style="background-color: rgb(249, 249, 249);"><br></td>
+                        <td class="date-column" style="background-color: rgb(239, 239, 239);">17</td>
+                        <td class="day-column" style="background-color: rgb(239, 239, 239);">الجمعة</td>
                         <td class="color-d">D</td>
                         <td class="color-b">B</td>
                         <td class="color-a">A</td>
@@ -342,7 +343,7 @@
                     <tr>
                         <td class="empty-cell"></td>
                         <td class="date-column">18</td>
-                        <td class="day-column">الثلاثاء</td>
+                        <td class="day-column">السبت</td>
                         <td class="color-d">D</td>
                         <td class="color-b">B</td>
                         <td class="color-c">C</td>
@@ -350,15 +351,15 @@
                     <tr>
                         <td class="empty-cell"></td>
                         <td class="date-column">19</td>
-                        <td class="day-column">الأربعاء</td>
+                        <td class="day-column">الأحد</td>
                         <td class="color-d">D</td>
                         <td class="color-b">B</td>
                         <td class="color-c">C</td>
                     </tr>
                     <tr>
-                        <td class="empty-cell"></td>
-                        <td class="date-column">20</td>
-                        <td class="day-column">الخميس</td>
+                        <td class="empty-cell" style="background-color: rgb(249, 249, 249);"><br></td>
+                        <td class="date-column" style="background-color: rgb(239, 239, 239);">20</td>
+                        <td class="day-column" style="background-color: rgb(239, 239, 239);">الإثنين</td>
                         <td class="color-a">A</td>
                         <td class="color-b">B</td>
                         <td class="color-c">C</td>
@@ -366,7 +367,7 @@
                     <tr>
                         <td class="empty-cell"></td>
                         <td class="date-column">21</td>
-                        <td class="day-column">الجمعة</td>
+                        <td class="day-column">الثلاثاء</td>
                         <td class="color-a">A</td>
                         <td class="color-d">D</td>
                         <td class="color-c">C</td>
@@ -374,15 +375,15 @@
                     <tr>
                         <td class="empty-cell"></td>
                         <td class="date-column">22</td>
-                        <td class="day-column">السبت</td>
+                        <td class="day-column">الأربعاء</td>
                         <td class="color-a">A</td>
                         <td class="color-d">D</td>
                         <td class="color-c">C</td>
                     </tr>
                     <tr>
-                        <td class="empty-cell highlighted-row" data-original-bg="rgb(249, 249, 249)" style="background-color: rgb(204, 204, 204);">ثورة يوليو</td>
-                        <td class="date-column highlighted-row" data-original-bg="rgb(239, 239, 239)" style="background-color: rgb(204, 204, 204);">23</td>
-                        <td class="day-column highlighted-row" data-original-bg="rgb(239, 239, 239)" style="background-color: rgb(204, 204, 204);">الأحد</td>
+                        <td class="empty-cell highlighted-row" style="background-color: rgb(204, 204, 204);" data-original-bg="rgb(249, 249, 249)">ثورة يوليو</td>
+                        <td class="date-column highlighted-row" style="background-color: rgb(204, 204, 204);" data-original-bg="rgb(239, 239, 239)">23</td>
+                        <td class="day-column highlighted-row" style="background-color: rgb(204, 204, 204);" data-original-bg="rgb(239, 239, 239)">الخميس</td>
                         <td class="color-a">A</td>
                         <td class="color-d">D</td>
                         <td class="color-b">B</td>
@@ -390,31 +391,31 @@
                     <tr>
                         <td class="empty-cell"></td>
                         <td class="date-column">24</td>
-                        <td class="day-column">الإثنين</td>
+                        <td class="day-column">الجمعة</td>
                         <td class="color-a">A</td>
                         <td class="color-d">D</td>
                         <td class="color-b">B</td>
                     </tr>
                     <tr>
-                        <td class="empty-cell"></td>
-                        <td class="date-column">25</td>
-                        <td class="day-column">الثلاثاء</td>
+                        <td class="empty-cell" style="background-color: rgb(249, 249, 249);"><br></td>
+                        <td class="date-column" style="background-color: rgb(239, 239, 239);">25</td>
+                        <td class="day-column" style="background-color: rgb(239, 239, 239);">السبت</td>
                         <td class="color-c">C</td>
                         <td class="color-d">D</td>
                         <td class="color-b">B</td>
                     </tr>
                     <tr>
-                        <td class="empty-cell"></td>
-                        <td class="date-column">26</td>
-                        <td class="day-column">الأربعاء</td>
+                        <td class="empty-cell" style="background-color: rgb(249, 249, 249);"><br></td>
+                        <td class="date-column" style="background-color: rgb(239, 239, 239);">26</td>
+                        <td class="day-column" style="background-color: rgb(239, 239, 239);">الأحد</td>
                         <td class="color-c">C</td>
                         <td class="color-a">A</td>
                         <td class="color-b">B</td>
                     </tr>
                     <tr>
-                        <td class="empty-cell"></td>
-                        <td class="date-column">27</td>
-                        <td class="day-column">الخميس</td>
+                        <td class="empty-cell" style="background-color: rgb(249, 249, 249);"><br></td>
+                        <td class="date-column" style="background-color: rgb(239, 239, 239);">27</td>
+                        <td class="day-column" style="background-color: rgb(239, 239, 239);">الإثنين</td>
                         <td class="color-c">C</td>
                         <td class="color-a">A</td>
                         <td class="color-b">B</td>
@@ -422,36 +423,36 @@
                     <tr>
                         <td class="empty-cell"></td>
                         <td class="date-column">28</td>
-                        <td class="day-column">الجمعة</td>
+                        <td class="day-column">الثلاثاء</td>
                         <td class="color-c">C</td>
                         <td class="color-a">A</td>
                         <td class="color-d">D</td>
                     </tr>
-                    <tr>
+                    
+                    
+                    
+                <tr>
                         <td class="empty-cell"></td>
                         <td class="date-column">29</td>
-                        <td class="day-column">السبت</td>
+                        <td class="day-column">الأربعاء</td>
                         <td class="color-c">C</td>
                         <td class="color-a">A</td>
                         <td class="color-d">D</td>
-                    </tr>
-                    <tr>
-                        <td class="empty-cell"></td>
-                        <td class="date-column">30</td>
-                        <td class="day-column">الأحد</td>
+                    </tr><tr>
+                        <td class="empty-cell" style="background-color: rgb(249, 249, 249);"><br></td>
+                        <td class="date-column" style="background-color: rgb(239, 239, 239);">30</td>
+                        <td class="day-column" style="background-color: rgb(239, 239, 239);">الخميس</td>
                         <td class="color-b">B</td>
                         <td class="color-a">A</td>
                         <td class="color-d">D</td>
-                    </tr>
-                    <tr>
+                    </tr><tr>
                         <td class="empty-cell"></td>
                         <td class="date-column">31</td>
-                        <td class="day-column">الإثنين</td>
+                        <td class="day-column">الجمعة</td>
                         <td class="color-b">B</td>
                         <td class="color-c">C</td>
                         <td class="color-d">D</td>
-                    </tr>
-                </tbody>
+                    </tr></tbody>
             </table>
         </div>
     </div>
