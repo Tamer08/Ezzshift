@@ -2,8 +2,8 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>جدول الوردية الشهرية - ٢١‏/١٢‏/٢٠٢٥</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>جدول الوردية الشهرية - ٣٠‏/١٢‏/٢٠٢٥</title>
     <style>
         * {
             margin: 0;
@@ -16,9 +16,11 @@
             direction: rtl;
             background-color: white;
             padding: 8px;
-            overflow: hidden !important;
             height: 100vh;
             width: 100vw;
+            overflow: hidden !important;
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
         }
         
         .container {
@@ -30,10 +32,9 @@
         }
         
         .table-wrapper {
-            flex: 1;
-            overflow: hidden;
             width: 100%;
             height: 100%;
+            overflow: hidden;
         }
         
         table {
@@ -45,13 +46,14 @@
             text-align: center;
             table-layout: fixed;
             border: 1.5px solid #333;
+            white-space: nowrap;
         }
         
         th, td {
             border: 1.3px solid #333 !important;
             padding: 1.2px !important;
             font-weight: 900;
-            word-wrap: break-word;
+            word-wrap: normal;
             overflow: hidden;
             vertical-align: middle;
             line-height: 1.1;
@@ -84,7 +86,7 @@
         
         th:nth-child(1), td:nth-child(1) { 
             width: 12%; 
-            font-size: 12px !important; /* تم تصغير الخط من 13 إلى 12 */
+            font-size: 12px !important;
         }
         th:nth-child(2), td:nth-child(2) { width: 6%; }
         th:nth-child(3), td:nth-child(3) { width: 10%; }
@@ -132,9 +134,10 @@
             font-weight: 900 !important;
             text-align: right !important;
             padding-right: 2px !important;
-            font-size: 12px !important; /* تم تصغير الخط من 13 إلى 12 */
+            font-size: 12px !important;
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
+            white-space: nowrap !important;
         }
         
         .empty-cell {
@@ -213,11 +216,21 @@
                 font-size: 9px !important; /* تم تصغير الخط من 10 إلى 9 */
             }
             
+            /* 
+             * هنا التعديل الوحيد للملف المصدر:
+             * استخدام vw للرأس فقط لضمان عدم اختفاء النص مع الخطوط الكبيرة
+             */
+            thead th {
+                white-space: nowrap !important; /* يمنع نزول النص لسطر ثاني */
+                font-size: 2.8vw !important; /* حجم يعتمد على عرض الشاشة */
+                padding: 2px 0 !important;
+            }
+
             /* تكبير النصوص في رأس الجدول للأعمدة 4 و 5 و 6 للشاشات الصغيرة */
             th:nth-child(4),
             th:nth-child(5),
             th:nth-child(6) {
-                font-size: 10px !important;
+                font-size: 3.5vw !important; /* حجم نسبي أكبر */
                 font-weight: bold !important;
             }
         }
@@ -285,9 +298,9 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="occasion-column highlighted-row" style="transition: 0.3s; background-color: rgb(204, 204, 204);" data-original-bg="rgb(239, 239, 239)">&nbsp; &nbsp; &nbsp; يوم العمال</td>
+                        <td class="occasion-column highlighted-row" style="transition: 0.3s; background-color: rgb(204, 204, 204);" data-original-bg="rgb(239, 239, 239)">&nbsp; &nbsp; &nbsp;يوم العمال</td>
                         <td class="date-column highlighted-row" style="transition: 0.3s; background-color: rgb(204, 204, 204);" data-original-bg="rgb(239, 239, 239)">1</td>
-                        <td class="day-column highlighted-row" style="background-color: rgb(204, 204, 204);" data-original-bg="rgb(239, 239, 239)">الجمعة</td>
+                        <td class="day-column highlighted-row" data-original-bg="rgb(239, 239, 239)" style="background-color: rgb(204, 204, 204);">الجمعة</td>
                         <td class="color-a">A</td>
                         <td class="color-b">B</td>
                         <td class="color-c">C</td>
@@ -381,9 +394,9 @@
                         <td class="color-d">D</td>
                     </tr>
                     <tr>
-                        <td class="empty-cell" style="background-color: rgb(249, 249, 249);"><br></td>
-                        <td class="date-column" style="background-color: rgb(239, 239, 239);">13</td>
-                        <td class="day-column" style="background-color: rgb(239, 239, 239);">الأربعاء</td>
+                        <td class="empty-cell"></td>
+                        <td class="date-column">13</td>
+                        <td class="day-column">الأربعاء</td>
                         <td class="color-b">B</td>
                         <td class="color-c">C</td>
                         <td class="color-d">D</td>
@@ -485,15 +498,15 @@
                         <td class="color-b">B</td>
                     </tr>
                     <tr>
-                        <td class="empty-cell highlighted-row" style="background-color: rgb(204, 204, 204);" data-original-bg="rgb(249, 249, 249)">وقفة عيد الأضحى</td>
-                        <td class="date-column highlighted-row" style="background-color: rgb(204, 204, 204);" data-original-bg="rgb(239, 239, 239)">26</td>
-                        <td class="day-column highlighted-row" style="background-color: rgb(204, 204, 204);" data-original-bg="rgb(239, 239, 239)">الثلاثاء</td>
+                        <td class="empty-cell highlighted-row" data-original-bg="rgb(249, 249, 249)" style="background-color: rgb(204, 204, 204);">وقفة عرفة</td>
+                        <td class="date-column highlighted-row" data-original-bg="rgb(239, 239, 239)" style="background-color: rgb(204, 204, 204);">26</td>
+                        <td class="day-column highlighted-row" data-original-bg="rgb(239, 239, 239)" style="background-color: rgb(204, 204, 204);">الثلاثاء</td>
                         <td class="color-c">C</td>
                         <td class="color-d">D</td>
                         <td class="color-b">B</td>
                     </tr>
                     <tr>
-                        <td class="empty-cell highlighted-row" data-original-bg="rgb(249, 249, 249)" style="background-color: rgb(204, 204, 204);">عيد الأضحى</td>
+                        <td class="empty-cell highlighted-row" data-original-bg="rgb(249, 249, 249)" style="background-color: rgb(204, 204, 204);">عيد الأضحي</td>
                         <td class="date-column highlighted-row" data-original-bg="rgb(239, 239, 239)" style="background-color: rgb(204, 204, 204);">27</td>
                         <td class="day-column highlighted-row" data-original-bg="rgb(239, 239, 239)" style="background-color: rgb(204, 204, 204);">الأربعاء</td>
                         <td class="color-c">C</td>
@@ -524,15 +537,15 @@
                         <td class="color-a">A</td>
                         <td class="color-d">D</td>
                     </tr>
-                    
-                <tr>
+                    <tr>
                         <td class="empty-cell"></td>
                         <td class="date-column">31</td>
                         <td class="day-column">الأحد</td>
                         <td class="color-b">B</td>
                         <td class="color-a">A</td>
                         <td class="color-d">D</td>
-                    </tr></tbody>
+                    </tr>
+                </tbody>
             </table>
         </div>
     </div>
