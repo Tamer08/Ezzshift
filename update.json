@@ -1,6 +1,4 @@
 {
-  "latest_version_code": 27,
-  "latest_version_name": "2.7",
-  "force_update": true,
-  "apk_url": "https://github.com/Tamer08/Ezzsteel/releases/latest/download/Ezzsadat.apk"
+  "version": "2.7",
+  "url": "https://github.com/tamer08/Ezzsteel/releases/download/v2.0/app-release.apk"
 }
