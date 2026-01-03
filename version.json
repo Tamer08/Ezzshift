@@ -1,5 +1,4 @@
 {
-  "global_version": 2,
   "files": {
     "social.html": 1,
     "date.html": 1,
@@ -11,6 +10,7 @@
     "azkar.html": 1,
     "holidays.html": 1,
     "listphone.html": 1,
+    "Ahkam.html": 1,
 
     "one.html": 1,
     "two.html": 1,
