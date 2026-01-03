@@ -138,7 +138,12 @@ function render(days){
 
  days.forEach(d=>{
   const g=d.date.gregorian;
-  const isToday=new Date(g.date).toDateString()===todayStr;
+  
+  // === بداية التعديل: تصحيح قراءة التاريخ ===
+  // التاريخ يأتي بصيغة يوم-شهر-سنة، لذا نفككه ونعيد تركيبه للتأكد
+  const [dd, mm, yyyy] = g.date.split('-').map(Number);
+  const isToday = new Date(yyyy, mm - 1, dd).toDateString() === todayStr;
+  // === نهاية التعديل ===
 
   const cell=document.createElement("div");
   cell.className="day-cell"+(isToday?" active":"");
