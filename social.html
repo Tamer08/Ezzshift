@@ -21,7 +21,7 @@ table{
   width:100%;
   border-spacing:20px 18px;
   table-layout:fixed;
-  direction: rtl; /* يبدأ من اليمين */
+  direction: rtl;
 }
 
 td{
@@ -165,21 +165,45 @@ td{
   </td>
 </tr>
 
-<!-- الصف الثالث: أذكار الصباح والمساء (أيقونة كتاب مفتوح) -->
+<!-- الصف الثالث -->
 <tr>
   <td>
     <div class="item" onclick="openPage('azkar')">
       <div class="icon">
+        <!-- الأيقونة الأصلية (كتاب مفتوح) -->
         <svg viewBox="0 0 24 24">
-          <!-- Open Book -->
           <path d="M21 4h-7a3 3 0 0 0-2 0H5a2 2 0 0 0-2 2v14a1 1 0 0 0 1 1h8a2 2 0 0 1 2 2 2 2 0 0 1 2-2h8a1 1 0 0 0 1-1V6a2 2 0 0 0-2-2zm0 15h-7a4 4 0 0 0-2 .5V6a1 1 0 0 1 1-1h8v14zm-10 .5A4 4 0 0 0 9 19H3V5h8a1 1 0 0 1 1 1v13.5z"/>
         </svg>
       </div>
-      <div class="text">أذكار الصباح والمساء</div>
+      <div class="text">أذكار الصباح و..</div>
     </div>
   </td>
 
-  <td></td>
+  <td>
+    <div class="item" onclick="openPage('sipha')">
+      <div class="icon">
+        <svg viewBox="0 0 24 24">
+          <!-- رأس رفيع أعلى السبحة -->
+          <rect x="11" y="0.8" width="2" height="2.2" rx="1"/>
+
+          <!-- حلقة السبحة -->
+          <ellipse cx="12" cy="13" rx="7" ry="8" fill="none" stroke="#fff" stroke-width="2"/>
+
+          <!-- الحبات -->
+          <ellipse cx="12" cy="5" rx="2" ry="1.5"/>
+          <ellipse cx="17" cy="8" rx="2" ry="1.5"/>
+          <ellipse cx="19" cy="13" rx="2" ry="1.5"/>
+          <ellipse cx="17" cy="18" rx="2" ry="1.5"/>
+          <ellipse cx="12" cy="21" rx="2" ry="1.5"/>
+          <ellipse cx="7" cy="18" rx="2" ry="1.5"/>
+          <ellipse cx="5" cy="13" rx="2" ry="1.5"/>
+          <ellipse cx="7" cy="8" rx="2" ry="1.5"/>
+        </svg>
+      </div>
+      <div class="text">المسبحة الإلكترونية</div>
+    </div>
+  </td>
+
   <td></td>
 </tr>
 
