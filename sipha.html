@@ -1,0 +1,1980 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-default>بنك التسبيح الإلكتروني</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js" onerror='console.error("Failed to load React")'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js" onerror='console.error("Failed to load ReactDOM")'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.22.5/babel.min.js" onerror='console.error("Failed to load Babel")'></script>
+    <script src="https://cdn.tailwindcss.com/3.4.1"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#FEA500", 
+              secondary: "#D98D00",
+              dark: {
+                100: "#1a1a1a",
+                200: "#2d2d2d",
+                300: "#404040",
+                400: "#525252",
+                500: "#737373",
+                600: "#a3a3a3",
+                700: "#d4d4d4",
+                800: "#f5f5f5",
+                900: "#ffffff"
+              },
+              light: {
+                100: "#ffffff",
+                200: "#f5f5f5",
+                300: "#e5e5e5",
+                400: "#d4d4d4",
+                500: "#a3a3a3",
+                600: "#737373",
+                700: "#525252",
+                800: "#404040",
+                900: "#2d2d2d"
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        font-family: Tajawal, Roboto, sans-serif;
+      }
+      [dir="rtl"] {
+        direction: rtl;
+      }
+      [dir="ltr"] {
+        direction: ltr;
+      }
+      [data-theme="dark"] {
+        background-color: #000;
+        color: #fff;
+      }
+      [data-theme="light"] {
+        background-color: #ffffff;
+        color: #000;
+      }
+      [data-theme="dark"] .header-title {
+        color: #fff !important;
+      }
+      @keyframes ripple {
+        0% {
+          transform: scale(0);
+          opacity: 0.6;
+        }
+        100% {
+          transform: scale(1.5);
+          opacity: 0;
+        }
+      }
+      @keyframes confetti {
+        0% {
+          transform: translateY(0) rotate(0);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(100vh) rotate(360deg);
+          opacity: 0;
+        }
+      }
+      .confetti {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        animation: confetti 2s linear forwards;
+        pointer-events: none;
+      }
+      .ripple-effect {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(254, 165, 0, 0.6) 10%, transparent 10.01%);
+        border-radius: 50%;
+        animation: ripple 0.6s ease-out;
+        pointer-events: none;
+        top: 0;
+        left: 0;
+      }
+      .circle-button {
+        transition: transform 0.1s ease, box-shadow 0.1s ease;
+      }
+      .circle-button:active {
+        transform: scale(0.95);
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+      .progress-circle {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        transform: rotate(-90deg);
+      }
+      .progress-circle-bg {
+        fill: none;
+        stroke-width: 14;
+      }
+      [data-theme="dark"] .progress-circle-bg {
+        stroke: #ffffff;
+      }
+      [data-theme="light"] .progress-circle-bg {
+        stroke: #f0f0f0;
+      }
+      .progress-circle-fill {
+        fill: none;
+        stroke: #FEA500;
+        stroke-width: 14;
+        stroke-linecap: round;
+        transition: stroke-dashoffset 0.3s ease;
+      }
+      [data-theme="dark"] .card {
+        background-color: #1a1a1a;
+        border: 1px solid #2d2d2d;
+      }
+      [data-theme="light"] .card {
+        background-color: #ffffff;
+        border: 1px solid #f0f0f0;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      }
+      [data-theme="dark"] .progress-bar {
+        background-color: #2d2d2d;
+      }
+      [data-theme="light"] .progress-bar {
+        background-color: #f0f0f0;
+      }
+      .progress-fill {
+        background-color: #FEA500;
+      }
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 50;
+      }
+      [data-theme="dark"] .modal-content {
+        background: #1a1a1a;
+        border: 1px solid #2d2d2d;
+      }
+      [data-theme="light"] .modal-content {
+        background: #fff;
+        border: 1px solid #d4d4d4;
+      }
+      .modal-content {
+        padding: 20px;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 400px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      [data-theme="dark"] .zikr-count {
+        color: #a3a3a3;
+      }
+      [data-theme="light"] .zikr-count {
+        color: #737373;
+      }
+      .no-select {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+      .celebrate-modal {
+        background: linear-gradient(135deg, #FEA500, #D98D00);
+        color: #000 !important;
+        border: none;
+        box-shadow: 0 0 20px rgba(254, 165, 0, 0.5);
+        animation: pulse 1.5s infinite;
+      }
+      .celebrate-modal p, .celebrate-modal h2, .celebrate-modal div {
+        color: #000 !important;
+      }
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      .language-switch-active {
+        border-color: #FEA500;
+        color: #FEA500;
+      }
+      .transition-dir {
+        transition: all 0.3s ease;
+      }
+      html {
+        transition: direction 0.3s ease;
+      }
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+      .dropdown-toggle {
+        cursor: pointer;
+        padding: 8px 12px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: all 0.2s ease;
+      }
+      .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        margin-top: 4px;
+        border-radius: 6px;
+        overflow: hidden;
+        z-index: 10;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        opacity: 0;
+        transform: translateY(-10px);
+        visibility: hidden;
+        transition: all 0.2s ease;
+      }
+      .dropdown-menu.show {
+        opacity: 1;
+        transform: translateY(0);
+        visibility: visible;
+      }
+      .dropdown-item {
+        padding: 8px 12px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        display: flex;
+        align-items: center;
+      }
+      .dropdown-item:hover {
+        background-color: rgba(254, 165, 0, 0.1);
+      }
+      .dropdown-icon {
+        transition: transform 0.2s ease;
+      }
+      .dropdown-icon.open {
+        transform: rotate(180deg);
+      }
+      [data-theme="dark"] .dropdown-toggle {
+        background-color: #1a1a1a;
+        border: 1px solid #2d2d2d;
+      }
+      [data-theme="light"] .dropdown-toggle {
+        background-color: #fff;
+        border: 1px solid #d4d4d4;
+      }
+      [data-theme="dark"] .dropdown-menu {
+        background-color: #1a1a1a;
+        border: 1px solid #2d2d2d;
+      }
+      [data-theme="light"] .dropdown-menu {
+        background-color: #fff;
+        border: 1px solid #d4d4d4;
+      }
+      .dropdown-item.active {
+        background-color: rgba(254, 165, 0, 0.1);
+        color: #FEA500;
+      }
+      .dropdown-flag {
+        font-size: 16px;
+        margin-right: 8px;
+      }
+      [dir="rtl"] .dropdown-flag {
+        margin-right: 0;
+        margin-left: 8px;
+      }
+      .dropdown-check {
+        margin-left: auto;
+        color: #FEA500;
+      }
+      [dir="rtl"] .dropdown-check {
+        margin-left: 0;
+        margin-right: auto;
+      }
+      /* Radio station styles */
+      .radio-station {
+        padding: 12px 16px;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+      }
+      [data-theme="dark"] .radio-station {
+        background-color: #1a1a1a;
+        border: 1px solid #2d2d2d;
+      }
+      [data-theme="light"] .radio-station {
+        background-color: #fff;
+        border: 1px solid #d4d4d4;
+      }
+      .radio-station.active {
+        border-color: #FEA500;
+        background-color: rgba(254, 165, 0, 0.1);
+      }
+      .radio-station.active .radio-station-name {
+        color: #FEA500;
+        font-weight: 500;
+      }
+      .radio-icon {
+        margin-left: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+      }
+      [dir="ltr"] .radio-icon {
+        margin-left: 0;
+        margin-right: 12px;
+      }
+      .radio-play-button {
+        position: fixed;
+        bottom: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: #FEA500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        box-shadow: 0 4px 10px rgba(254, 165, 0, 0.3);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 10;
+      }
+      .radio-play-button:hover {
+        transform: translateX(-50%) scale(1.05);
+        box-shadow: 0 6px 15px rgba(254, 165, 0, 0.4);
+      }
+      .radio-play-button:active {
+        transform: translateX(-50%) scale(0.95);
+      }
+      @keyframes equalizer {
+        0% { height: 5px; }
+        50% { height: 15px; }
+        100% { height: 5px; }
+      }
+      .equalizer {
+        display: flex;
+        align-items: flex-end;
+        height: 15px;
+        width: 15px;
+      }
+      .equalizer-bar {
+        width: 3px;
+        background-color: #FEA500;
+        margin: 0 1px;
+        border-radius: 1px;
+      }
+      .equalizer-bar:nth-child(1) {
+        animation: equalizer 0.9s ease-in-out infinite;
+      }
+      .equalizer-bar:nth-child(2) {
+        animation: equalizer 0.9s ease-in-out 0.3s infinite;
+      }
+      .equalizer-bar:nth-child(3) {
+        animation: equalizer 0.9s ease-in-out 0.6s infinite;
+      }
+      /* Mini player styles */
+      .mini-player {
+        position: fixed;
+        bottom: 70px;
+        left: 10px;
+        background-color: rgba(254, 165, 0, 0.9);
+        border-radius: 20px;
+        padding: 6px 12px;
+        display: flex;
+        align-items: center;
+        color: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        z-index: 9;
+        max-width: 180px;
+        overflow: hidden;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.3s ease;
+      }
+      .mini-player.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .mini-player-icon {
+        margin-right: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      [dir="rtl"] .mini-player {
+        left: auto;
+        right: 10px;
+      }
+      [dir="rtl"] .mini-player-icon {
+        margin-right: 0;
+        margin-left: 8px;
+      }
+      .mini-player-text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 12px;
+      }
+      /* Override input placeholder color for light mode */
+      [data-theme="light"] input::placeholder {
+        color: #a3a3a3;
+      }
+    </style>
+    <script>
+      window.addEventListener("error", (e) => {
+        if (e.message.includes("Script error") || e.message.includes("Failed to load")) {
+          document.getElementById("root").innerHTML = `
+            <div style="color: red; text-align: center; padding: 20px;">
+              <h1>خطأ في تحميل التطبيق</h1>
+              <p>يرجى التحقق من اتصالك بالإنترنت وإعادة المحاولة.</p>
+            </div>
+          `;
+        }
+      });
+    </script>
+  </head>
+  <body data-theme="light">
+    <div id="root"></div>
+    <script>
+      var gk_isXlsx = false, gk_xlsxFileLookup = {}, gk_fileData = {};
+      function filledCell(e) {
+        return e !== "" && e != null;
+      }
+      function loadFileData(e) {
+        if (gk_isXlsx && gk_xlsxFileLookup[e]) {
+          try {
+            var l = XLSX.read(gk_fileData[e], { type: "base64" }),
+              t = l.SheetNames[0],
+              i = l.Sheets[t],
+              o = XLSX.utils.sheet_to_json(i, { header: 1, blankrows: false, defval: "" }).filter(e => e.some(filledCell)),
+              s = o.findIndex((e, l) => e.filter(filledCell).length >= (o[l + 1]?.filter(filledCell).length || 0));
+            if (s === -1 || s > 25) s = 0;
+            var r = XLSX.utils.aoa_to_sheet(o.slice(s));
+            return XLSX.utils.sheet_to_csv(r, { header: 1 });
+          } catch (e) {
+            console.error(e);
+            return "";
+          }
+        }
+        return gk_fileData[e] || "";
+      }
+      const isProduction = false,
+        log = (...e) => {
+          console.log(...e);
+        };
+    </script>
+    <script type="text/babel">
+    // Translation object for all app strings
+    const translations = {
+      ar: {
+        appTitle: "بنك التسبيح الإلكتروني",
+        tasbihTab: "التسبيح",
+        azkarTab: "الأذكار",
+        statsTab: "الإحصائيات",
+        radioTab: "الإذاعة",
+        settingsTab: "الإعدادات",
+        dailyGoal: "الهدف اليومي",
+        searchZikr: "ابحث عن ذكر...",
+        dailyCount: "العدد اليومي",
+        totalCount: "العدد الكلي",
+        dateNotAvailable: "التاريخ غير متوفر",
+        editZikrGoalTitle: "تعديل هدف الدائرة لـ",
+        addZikrTitle: "إضافة ذكر جديد",
+        editZikrTitle: "تعديل الذكر",
+        deleteZikrTitle: "هل تريد حذف",
+        editDailyGoalTitle: "تعديل الهدف اليومي",
+        editMonthlyGoalTitle: "تعديل الهدف الشهري",
+        aboutTitle: "عن التطبيق",
+        congrats: "تهانينا!",
+        enterValue: "اكتب الذكر...", // Updated
+        confirm: "تأكيد",
+        close: "إغلاق",
+        aboutContent1: "بنك التسبيح الإلكتروني - الإصدار 1.0.0",
+        aboutContent2: "تطبيق يساعدك على تسبيح الله وذكره في أي وقت ومكان.",
+        mainFeatures: "المميزات الرئيسية:",
+        feature1: "عداد تسبيح سهل الاستخدام",
+        feature2: "إمكانية إضافة وتعديل الأذكار المخصصة",
+        feature3: "متابعة الإحصائيات اليومية والشهرية",
+        feature4: "إمكانية ضبط الأهداف اليومية والشهرية",
+        goalReachedMsg: "جزاكم الله خيرًا كثيرًا على إكمال المهمة",
+        dailyGoalReachedTitle: "أحسنت! 🎉 مبارك عليك إنجازك العظيم!",
+        dailyGoalReachedMsg1: "لقد تجاوزت هدفك اليومي في ذكر الله، ما شاء الله!",
+        dailyGoalReachedMsg2: "جزاك الله خير الجزاء على إخلاصك ومحبتك لذكره.",
+        dailyGoalReachedMsg3: "واصل التألق في طاعة الله، فذكره نور القلب والروح!",
+        maxDailyZikrReachedTitle: "ماشاء الله! 🎉 لقد كسرت الرقم القياسي!",
+        maxDailyZikrReachedMsg1: "مبارك عليك تجاوز أقصى تسبيحات يومية سابقة!",
+        maxDailyZikrReachedMsg2: "إنجازك مذهل في ذكر الله، فواصل التألق!",
+        maxDailyZikrReachedMsg3: "ذكر الله يملأ القلب نورًا وسعادة، فاستمر في هذا الطريق!",
+        darkMode: "الوضع الداكن",
+        sound: "الصوت",
+        vibration: "الاهتزاز",
+        language: "اللغة",
+        arabic: "العربية",
+        english: "الإنجليزية",
+        about: "عن التطبيق",
+        selectLanguage: "اختر اللغة",
+        gregorianDate: (date) => {
+          return new Intl.DateTimeFormat('ar', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+            calendar: 'gregory'
+          }).format(date);
+        },
+        maxDailyDate: (dateString) => {
+          if (!dateString) return 'لم يتم التسجيل';
+          const date = new Date(dateString);
+          return new Intl.DateTimeFormat('ar', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            calendar: 'gregory'
+          }).format(date);
+        },
+        dailyStats: "التسبيحات اليومية",
+        monthlyStats: "التسبيحات الشهرية",
+        maxDailyStats: "أقصى تسبيحات يومية",
+        date: "التاريخ",
+        totalStats: "المجموع الكلي",
+        errorLoading: "خطأ: فشل تحميل التطبيق. سيتم إعادة تعيين التطبيق.",
+        errorCurrentZikr: "خطأ: الذكر الحالي غير موجود",
+        invalidGoalValue: "يرجى إدخال رقم صحيح إيجابي",
+        errorZikrNotFound: "خطأ: الذكر غير موجود",
+        errorEditingGoal: "حدث خطأ أثناء تعديل الهدف:",
+        emptyZikrText: "يرجى إدخال نص الذكر",
+        duplicateZikr: "الذكر موجود بالفعل",
+        errorAddingZikr: "حدث خطأ أثناء إضافة الذكر:",
+        errorEditingZikr: "حدث خطأ أثناء تعديل الذكر:",
+        errorDeletingZikr: "خطأ أثناء محاولة حذف الذكر:",
+        monthlyGoal: "الهدف الشهري",
+        radioTitle: "إذاعات القرآن الكريم",
+        radioStations: [
+          "إذاعة القرآن الكريم من القاهرة",
+          "قناة القرآن الكريم مصر",
+          "إذاعة القرآن الكريم من السعودية",
+          "قناة القرآن الكريم السعودية",
+          "قناة السنة النبوية الشريفة"
+        ],
+        play: "تشغيل",
+        pause: "إيقاف",
+        nowPlaying: "يشغل الآن",
+        radioPlayingOn: "الإذاعة تعمل"
+      },
+      en: {
+        appTitle: "Al-Makan Electronic Tasbih",
+        tasbihTab: "Tasbih",
+        azkarTab: "Adhkar",
+        statsTab: "Statistics",
+        radioTab: "Radio",
+        settingsTab: "Settings",
+        dailyGoal: "Daily Goal",
+        searchZikr: "Search for dhikr...",
+        dailyCount: "Daily Count",
+        totalCount: "Total Count",
+        dateNotAvailable: "Date not available",
+        editZikrGoalTitle: "Edit Circle Goal for",
+        addZikrTitle: "Add New Dhikr",
+        editZikrTitle: "Edit Dhikr",
+        deleteZikrTitle: "Do you want to delete",
+        editDailyGoalTitle: "Edit Daily Goal",
+        editMonthlyGoalTitle: "Edit Monthly Goal",
+        aboutTitle: "About",
+        congrats: "Congratulations!",
+        enterValue: "Write the Dhikr...", // Updated
+        confirm: "Confirm",
+        close: "Close",
+        aboutContent1: "Al-Makan Electronic Tasbih - Version 1.0.0",
+        aboutContent2: "An application that helps you remember Allah anywhere and anytime.",
+        mainFeatures: "Main Features:",
+        feature1: "Easy-to-use tasbih counter",
+        feature2: "Add and edit custom adhkar",
+        feature3: "Track daily and monthly statistics",
+        feature4: "Set daily and monthly goals",
+        goalReachedMsg: "May Allah reward you for completing the task",
+        dailyGoalReachedTitle: "Well done! 🎉 Congratulations on your great achievement!",
+        dailyGoalReachedMsg1: "You've exceeded your daily goal in remembering Allah, ma sha Allah!",
+        dailyGoalReachedMsg2: "May Allah reward you for your sincerity and love for His remembrance.",
+        dailyGoalReachedMsg3: "Continue to excel in obedience to Allah, for His remembrance is the light of heart and soul!",
+        maxDailyZikrReachedTitle: "Ma sha Allah! 🎉 You've broken the record!",
+        maxDailyZikrReachedMsg1: "Congratulations on exceeding your previous maximum daily dhikr!",
+        maxDailyZikrReachedMsg2: "Your achievement in remembering Allah is amazing, keep excelling!",
+        maxDailyZikrReachedMsg3: "The remembrance of Allah fills the heart with light and happiness, continue on this path!",
+        darkMode: "Dark Mode",
+        sound: "Sound",
+        vibration: "Vibration",
+        language: "Language",
+        arabic: "Arabic",
+        english: "English",
+        about: "About",
+        selectLanguage: "Select Language",
+        gregorianDate: (date) => {
+          return new Intl.DateTimeFormat('en', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+          }).format(date);
+        },
+        maxDailyDate: (dateString) => {
+          if (!dateString) return 'Not recorded';
+          const date = new Date(dateString);
+          return new Intl.DateTimeFormat('en', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          }).format(date);
+        },
+        dailyStats: "Daily Dhikr",
+        monthlyStats: "Monthly Dhikr",
+        maxDailyStats: "Maximum Daily Dhikr",
+        date: "Date",
+        totalStats: "Total Count",
+        errorLoading: "Error: Failed to load the application. The app will be reset.",
+        errorCurrentZikr: "Error: Current dhikr not found",
+        invalidGoalValue: "Please enter a positive integer",
+        errorZikrNotFound: "Error: Dhikr not found",
+        errorEditingGoal: "An error occurred while editing the goal:",
+        emptyZikrText: "Please enter the dhikr text",
+        duplicateZikr: "This dhikr already exists",
+        errorAddingZikr: "An error occurred while adding the dhikr:",
+        errorEditingZikr: "An error occurred while editing the dhikr:",
+        errorDeletingZikr: "An error occurred while trying to delete the dhikr:",
+        monthlyGoal: "Monthly Goal",
+        radioTitle: "Quran Radio Stations",
+        radioStations: [
+          "Cairo Quran Radio",
+          "Egypt Quran Channel",
+          "Saudi Quran Radio",
+          "Saudi Quran Channel",
+          "Sunnah Nabawiyah Channel"
+        ],
+        play: "Play",
+        pause: "Pause",
+        nowPlaying: "Now Playing",
+        radioPlayingOn: "Radio is on"
+      }
+    };
+
+    function Modal({
+      isOpen,
+      onClose,
+      onSubmit,
+      title,
+      defaultValue = '',
+      type = 'text',
+      isConfirm = false,
+      lang
+    }) {
+      const [inputValue, setInputValue] = React.useState(defaultValue);
+      const t = translations[lang];
+
+      React.useEffect(() => {
+        setInputValue(defaultValue);
+        log('Modal: defaultValue updated to:', defaultValue);
+      }, [defaultValue]);
+
+      if (!isOpen) {
+        log('Modal: Not open, returning null');
+        return null;
+      }
+
+      const handleConfirm = () => {
+        log('Modal: handleConfirm called with value:', inputValue, 'isConfirm:', isConfirm);
+        try {
+          if (!onSubmit && !isConfirm) {
+            console.error('Modal: onSubmit is not defined');
+            alert('Error: confirm function is not defined');
+            onClose();
+            return;
+          }
+          if (onSubmit) {
+            onSubmit(isConfirm ? true : inputValue);
+            log('Modal: onSubmit executed successfully');
+          }
+          onClose();
+        } catch (error) {
+          console.error('Modal: Error in handleConfirm:', error);
+          alert('An error occurred while executing the action: ' + error.message);
+          onClose();
+        }
+      };
+
+      const generateConfetti = () => {
+        const colors = ['#FEA500', '#D98D00', '#FFD700', '#FF6347', '#40E0D0'];
+        const confetti = [];
+        for (let i = 0; i < 20; i++) {
+          const style = {
+            backgroundColor: colors[Math.floor(Math.random() * colors.length)],
+            top: `${Math.random() * 100}%`,
+            left: `${Math.random() * 100}%`,
+            animationDelay: `${Math.random() * 2}s`,
+            animationDuration: '2s',
+          };
+          confetti.push(<div key={i} className="confetti" style={style}></div>);
+        }
+        return confetti;
+      };
+
+      // Determine placeholder text
+      const getPlaceholder = () => {
+        if (type === 'number') {
+          return lang === 'ar' ? "أدخل الرقم..." : "Enter number...";
+        }
+        return t.enterValue;
+      };
+
+      return (
+        <div 
+          className="modal-overlay" 
+          onClick={isConfirm ? onClose : undefined}
+        >
+          <div 
+            className={`modal-content ${type === 'dailyGoalReached' || type === 'maxDailyZikrReached' ? 'celebrate-modal' : ''}`} 
+            onClick={(e) => e.stopPropagation()}
+          >
+            {(type === 'dailyGoalReached' || type === 'maxDailyZikrReached') && generateConfetti()}
+            <h2 className={`text-lg font-medium mb-4 ${type === 'dailyGoalReached' || type === 'maxDailyZikrReached' ? 'text-black' : 'text-primary'}`}>{title}</h2>
+            {!isConfirm && (
+              <input
+                type={type}
+                value={inputValue}
+                onChange={(e) => {
+                  setInputValue(e.target.value);
+                  log('Modal: Input changed to:', e.target.value);
+                }}
+                className="w-full py-2 px-4 border rounded-lg mb-4 text-[color:--text-color] bg-[color:--input-bg] border-[color:--input-border]"
+                placeholder={getPlaceholder()}
+              />
+            )}
+            {isConfirm && (
+              <div className="text-[color:--text-color] mb-4">
+                {type === 'about' ? (
+                  <>
+                    <p>{t.aboutContent1}</p>
+                    <p>{t.aboutContent2}</p>
+                    <p className="mt-2">{t.mainFeatures}</p>
+                    <ul className={`list-disc ${lang === 'ar' ? 'mr-4 text-right' : 'ml-4 text-left'}`}>
+                      <li>{t.feature1}</li>
+                      <li>{t.feature2}</li>
+                      <li>{t.feature3}</li>
+                      <li>{t.feature4}</li>
+                    </ul>
+                  </>
+                ) : type === 'goalReached' ? (
+                  <p>{t.goalReachedMsg}</p>
+                ) : type === 'dailyGoalReached' ? (
+                  <div className="text-black">
+                    <p className="text-2xl font-bold mb-2">{t.dailyGoalReachedTitle}</p>
+                    <p className="text-lg">{t.dailyGoalReachedMsg1}</p>
+                    <p className="mt-2">{t.dailyGoalReachedMsg2}</p>
+                    <p className="mt-2 text-sm">{t.dailyGoalReachedMsg3}</p>
+                  </div>
+                ) : type === 'maxDailyZikrReached' ? (
+                  <div className="text-black">
+                    <p className="text-2xl font-bold mb-2">{t.maxDailyZikrReachedTitle}</p>
+                    <p className="text-lg">{t.maxDailyZikrReachedMsg1}</p>
+                    <p className="mt-2">{t.maxDailyZikrReachedMsg2}</p>
+                    <p className="mt-2 text-sm">{t.maxDailyZikrReachedMsg3}</p>
+                  </div>
+                ) : (
+                  <p>{title}</p>
+                )}
+              </div>
+            )}
+            <div className="flex justify-center">
+              {isConfirm && type !== 'dailyGoalReached' && type !== 'about' && type !== 'goalReached' && type !== 'maxDailyZikrReached' && (
+                <button
+                  type="button"
+                  onClick={handleConfirm}
+                  className="bg-primary text-white px-4 py-2 rounded-lg mx-2"
+                >
+                  {t.confirm}
+                </button>
+              )}
+              {!isConfirm && (
+                <button
+                  type="button"
+                  onClick={handleConfirm}
+                  className="bg-primary text-white px-4 py-2 rounded-lg mx-2"
+                >
+                  {t.confirm}
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => {
+                  log('Modal: Cancel button clicked');
+                  onClose();
+                }}
+                className={`px-4 py-2 rounded-lg mx-2 ${type === 'dailyGoalReached' || type === 'maxDailyZikrReached' ? 'bg-white text-primary' : 'bg-[color:--button-bg] text-[color:--text-color]'}`}
+              >
+                {t.close}
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      log('App: Component rendered');
+      const [state, setState] = React.useState({
+        count: 0,
+        dailyCount: 0,
+        currentZikr: 'سبحان الله',
+        azkar: [
+          { id: '1', text: 'سبحان الله', dailyCount: 0, totalCount: 0, circleGoal: 33 },
+          { id: '2', text: 'الحمد لله', dailyCount: 0, totalCount: 0, circleGoal: 33 },
+          { id: '3', text: 'الله أكبر', dailyCount: 0, totalCount: 0, circleGoal: 33 },
+          { id: '4', text: 'لا إله إلا الله', dailyCount: 0, totalCount: 0, circleGoal: 33 },
+          { id: '5', text: 'أستغفر الله', dailyCount: 0, totalCount: 0, circleGoal: 33 }
+        ],
+        settings: {
+          sound: false, 
+          vibration: true,
+          theme: 'light', 
+          language: 'ar'
+        },
+        stats: {
+          daily: 0,
+          monthly: 0,
+          total: 0,
+          maxDailyZikr: {
+            count: 0,
+            date: ''
+          },
+          goals: {
+            daily: 100,
+            monthly: 8000
+          },
+          lastZikr: {
+            text: '',
+            count: 0
+          },
+          hasMaxDailyZikrModalShown: false
+        },
+        radio: {
+          stations: [
+            { id: '1', name: 'إذاعة القرآن الكريم من القاهرة', url: 'https://stream.radiojar.com/8s5u5tpdtwzuv' },
+            { id: '2', name: 'قناة القرآن الكريم مصر', url: 'https://stream.radiojar.com/htnudfgugm8uv' },
+            { id: '3', name: 'إذاعة القرآن الكريم من السعودية', url: 'https://stream.radiojar.com/0tpy1h0kxtzuv' },
+            { id: '4', name: 'قناة القرآن الكريم السعودية', url: 'https://r7.tarat.com:8004/index.html/stream' },
+            { id: '5', name: 'قناة السنة النبوية الشريفة', url: 'https://n0a.radiojar.com/dktga74wdd3vv' }
+          ],
+          currentStation: null,
+          isPlaying: false
+        }
+      });
+
+      const [activeTab, setActiveTab] = React.useState('tasbih');
+      const [searchTerm, setSearchTerm] = React.useState('');
+      const [modal, setModal] = React.useState({ isOpen: false, type: '', data: {}, isConfirm: false });
+      const [sound] = React.useState(new Audio('https://soundbible.com/mp3/Click2-Sebastian-759472264.mp3'));
+      const [isPressed, setIsPressed] = React.useState(false);
+      const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = React.useState(false);
+      const [showMiniPlayer, setShowMiniPlayer] = React.useState(false);
+      const dropdownRef = React.useRef(null);
+      const audioRef = React.useRef(null);
+      
+      const t = translations[state.settings.language];
+
+      React.useEffect(() => {
+        const htmlElement = document.documentElement;
+        htmlElement.setAttribute('lang', state.settings.language);
+        htmlElement.setAttribute('dir', state.settings.language === 'ar' ? 'rtl' : 'ltr');
+        document.title = t.appTitle;
+        document.body.style.fontFamily = state.settings.language === 'ar' ? 'Tajawal, sans-serif' : 'Roboto, sans-serif';
+      }, [state.settings.language, t.appTitle]);
+
+      React.useEffect(() => {
+        function handleClickOutside(event) {
+          if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setIsLanguageDropdownOpen(false);
+          }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+          document.removeEventListener("mousedown", handleClickOutside);
+        };
+      }, []);
+
+      React.useEffect(() => {
+        if (!audioRef.current) {
+          audioRef.current = new Audio();
+        }
+        return () => {
+          if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.src = '';
+          }
+        };
+      }, []);
+
+      React.useEffect(() => {
+        log('App: Loading state from localStorage');
+        try {
+          const savedState = localStorage.getItem('tasbihState');
+          const lastResetDate = localStorage.getItem('lastResetDate');
+          const today = new Date().toISOString().split('T')[0];
+
+          let newState = { ...state };
+          if (savedState) {
+            try {
+              let parsedState = JSON.parse(savedState);
+              if (!parsedState.azkar || !Array.isArray(parsedState.azkar)) {
+                throw new Error('Invalid state structure');
+              }
+              if (!parsedState.radio) {
+                parsedState.radio = state.radio;
+              }
+              newState = {
+                ...parsedState,
+                settings: {
+                  ...parsedState.settings,
+                  theme: parsedState.settings.theme || 'light',
+                  language: parsedState.settings.language || 'ar',
+                  sound: false 
+                },
+                stats: {
+                  ...parsedState.stats,
+                  maxDailyZikr: parsedState.stats.maxDailyZikr || { count: 0, date: '' },
+                  hasMaxDailyZikrModalShown: parsedState.stats.hasMaxDailyZikrModalShown || false
+                },
+                radio: parsedState.radio || state.radio
+              };
+              if (lastResetDate !== today) {
+                log('App: New day detected, resetting daily counters');
+                newState = {
+                  ...newState,
+                  dailyCount: 0,
+                  azkar: newState.azkar.map(z => ({ ...z, dailyCount: 0 })),
+                  stats: {
+                    ...newState.stats,
+                    daily: 0,
+                    hasMaxDailyZikrModalShown: false
+                  }
+                };
+                localStorage.setItem('lastResetDate', today);
+              }
+              log('App: State loaded from localStorage:', newState);
+            } catch (parseError) {
+              console.error('App: Failed to parse localStorage state, resetting to default:', parseError);
+              localStorage.removeItem('tasbihState');
+              localStorage.setItem('lastResetDate', today);
+            }
+          } else {
+            localStorage.setItem('lastResetDate', today);
+            log('App: No saved state, using initial state with light theme');
+          }
+          setState(newState);
+          localStorage.setItem('tasbihState', JSON.stringify(newState));
+          log('App: State saved to localStorage:', newState);
+        } catch (error) {
+          console.error('App: Error parsing saved state or resetting counters:', error);
+          document.getElementById('root').innerHTML = `<h1 style="color: red; text-align: center;">${t.errorLoading}</h1>`;
+        }
+      }, []);
+
+      React.useEffect(() => {
+        try {
+          localStorage.setItem('tasbihState', JSON.stringify(state));
+          log('App: State saved to localStorage:', state);
+          document.body.setAttribute('data-theme', state.settings.theme);
+        } catch (error) {
+          console.error('App: Error saving state to localStorage:', error);
+        }
+      }, [state]);
+
+      const toggleTheme = () => {
+        const newTheme = state.settings.theme === 'dark' ? 'light' : 'dark';
+        updateSetting('theme', newTheme);
+      };
+
+      const incrementCounter = (e) => {
+        e.stopPropagation();
+        log('App: incrementCounter triggered');
+        try {
+          const zikr = state.azkar.find(z => z.text === state.currentZikr);
+          if (!zikr) {
+            console.error('App: Current zikr not found:', state.currentZikr);
+            return;
+          }
+
+          setState(prevState => {
+            const newCount = prevState.count + 1;
+            const newDailyCount = prevState.dailyCount + 1;
+            const newDaily = prevState.stats.daily + 1;
+            const newMonthly = prevState.stats.monthly + 1;
+            const newTotal = prevState.stats.total + 1;
+            
+            const resetCount = newCount >= zikr.circleGoal ? 0 : newCount;
+            
+            const updatedAzkar = prevState.azkar.map(z => 
+              z.text === state.currentZikr 
+                ? { ...z, dailyCount: z.dailyCount + 1, totalCount: z.totalCount + 1 } 
+                : z
+            );
+
+            const maxDailyZikrUpdate = newDailyCount > prevState.stats.maxDailyZikr.count 
+              ? {
+                  count: newDailyCount,
+                  date: new Date().toISOString().split('T')[0]
+                } 
+              : prevState.stats.maxDailyZikr;
+            
+            if (prevState.settings.vibration && 'vibrate' in navigator) {
+              if (newCount >= zikr.circleGoal) {
+                navigator.vibrate([100, 50, 100]);
+                setModal({
+                  isOpen: true,
+                  type: 'goalReached',
+                  data: { message: t.goalReachedMsg },
+                  isConfirm: true
+                });
+              } else if (newDailyCount === prevState.stats.goals.daily) {
+                navigator.vibrate([100, 50, 100]);
+                setModal({
+                  isOpen: true,
+                  type: 'dailyGoalReached',
+                  data: { message: t.dailyGoalReachedTitle },
+                  isConfirm: true
+                });
+              } else if (
+                newDailyCount === prevState.stats.maxDailyZikr.count + 1 && 
+                prevState.stats.maxDailyZikr.count > 0 && 
+                !prevState.stats.hasMaxDailyZikrModalShown
+              ) {
+                navigator.vibrate([200, 50, 200]);
+                setModal({
+                  isOpen: true,
+                  type: 'maxDailyZikrReached',
+                  data: { message: t.maxDailyZikrReachedTitle },
+                  isConfirm: true
+                });
+                return {
+                  ...prevState,
+                  count: resetCount,
+                  dailyCount: newDailyCount,
+                  stats: {
+                    ...prevState.stats,
+                    daily: newDaily,
+                    monthly: newMonthly,
+                    total: newTotal,
+                    maxDailyZikr: maxDailyZikrUpdate,
+                    lastZikr: {
+                      text: state.currentZikr,
+                      count: prevState.stats.lastZikr.text === state.currentZikr ? 
+                        prevState.stats.lastZikr.count + 1 : 1
+                    },
+                    hasMaxDailyZikrModalShown: true
+                  },
+                  azkar: updatedAzkar
+                };
+              } else {
+                navigator.vibrate(30); 
+              }
+            }
+            
+            return {
+              ...prevState,
+              count: resetCount,
+              dailyCount: newDailyCount,
+              stats: {
+                ...prevState.stats,
+                daily: newDaily,
+                monthly: newMonthly,
+                total: newTotal,
+                maxDailyZikr: maxDailyZikrUpdate,
+                lastZikr: {
+                  text: state.currentZikr,
+                  count: prevState.stats.lastZikr.text === state.currentZikr ? 
+                    prevState.stats.lastZikr.count + 1 : 1
+                }
+              },
+              azkar: updatedAzkar
+            };
+          });
+        } catch (error) {
+          console.error('App: Error in incrementCounter:', error);
+        }
+      };
+
+      const handleMouseDown = (e) => {
+        e.preventDefault();
+        setIsPressed(true);
+      };
+
+      const handleMouseUp = () => {
+        setIsPressed(false);
+      };
+
+      const handleContextMenu = (e) => {
+        e.preventDefault();
+      };
+
+      const resetCounter = (e) => {
+        e.stopPropagation();
+        log('App: resetCounter triggered');
+        try {
+          setState(prevState => ({
+            ...prevState,
+            count: 0
+          }));
+        } catch (error) {
+          console.error('App: Error in resetCounter:', error);
+        }
+      };
+
+      const openModal = (type, data = {}, isConfirm = false) => {
+        log('App: openModal called with type:', type, 'data:', data, 'isConfirm:', isConfirm);
+        try {
+          setModal({ isOpen: true, type, data, isConfirm });
+          log('App: Modal state updated:', { isOpen: true, type, data, isConfirm });
+        } catch (error) {
+          console.error('App: Error in openModal:', error);
+          alert('Error while opening modal: ' + error.message);
+        }
+      };
+
+      const closeModal = () => {
+        log('App: closeModal called');
+        try {
+          setModal({ isOpen: false, type: '', data: {}, isConfirm: false });
+          log('App: Modal closed');
+        } catch (error) {
+          console.error('App: Error in closeModal:', error);
+        }
+      };
+
+      const editCurrentZikrGoal = (e) => {
+        e.stopPropagation();
+        log('App: editCurrentZikrGoal triggered');
+        try {
+          const zikr = state.azkar.find(z => z.text === state.currentZikr);
+          if (!zikr) {
+            console.error('App: Current zikr not found:', state.currentZikr);
+            alert(t.errorCurrentZikr);
+            return;
+          }
+          openModal('editZikrGoal', { zikr, defaultValue: zikr.circleGoal.toString() });
+        } catch (error) {
+          console.error('App: Error in editCurrentZikrGoal:', error);
+        }
+      };
+
+      const handleEditZikrGoal = (value) => {
+        log('App: handleEditZikrGoal called with value:', value);
+        try {
+          const goalValue = parseInt(value);
+          if (isNaN(goalValue) || goalValue <= 0) {
+            console.warn('App: Invalid goal value:', value);
+            alert(t.invalidGoalValue);
+            return;
+          }
+          const zikr = modal.data.zikr;
+          if (!zikr) {
+            console.error('App: Zikr not found in modal data');
+            alert(t.errorZikrNotFound);
+            return;
+          }
+          setState(prevState => ({
+            ...prevState,
+            count: 0,
+            azkar: prevState.azkar.map(z => 
+              z.id === zikr.id ? { ...z, circleGoal: goalValue } : z
+            )
+          }));
+          log('App: Zikr goal updated successfully');
+        } catch (error) {
+          console.error('App: Error in handleEditZikrGoal:', error);
+          alert(`${t.errorEditingGoal} ${error.message}`);
+        }
+      };
+
+      const switchToZikr = (zikrText) => {
+        log('App: switchToZikr triggered:', zikrText);
+        try {
+          setState(prevState => ({
+            ...prevState,
+            currentZikr: zikrText,
+            count: 0
+          }));
+          setActiveTab('tasbih');
+        } catch (error) {
+          console.error('App: Error in switchToZikr:', error);
+        }
+      };
+
+      const addZikr = (e) => {
+        e.stopPropagation();
+        log('App: addZikr triggered');
+        try {
+          openModal('addZikr', { defaultValue: '' });
+        } catch (error) {
+          console.error('App: Error in addZikr:', error);
+        }
+      };
+
+      const handleAddZikr = (text) => {
+        log('App: handleAddZikr called with text:', text);
+        try {
+          if (!text || !text.trim()) {
+            console.warn('App: Empty zikr text');
+            alert(t.emptyZikrText);
+            return;
+          }
+          const trimmedText = text.trim();
+          if (state.azkar.some(z => z.text === trimmedText)) {
+            console.warn('App: Duplicate zikr:', trimmedText);
+            alert(t.duplicateZikr);
+            return;
+          }
+          const newZikr = {
+            id: Date.now().toString(),
+            text: trimmedText,
+            dailyCount: 0,
+            totalCount: 0,
+            circleGoal: 33
+          };
+          setState(prevState => ({
+            ...prevState,
+            azkar: [...prevState.azkar, newZikr]
+          }));
+          log('App: Zikr added successfully');
+        } catch (error) {
+          console.error('App: Error in handleAddZikr:', error);
+          alert(`${t.errorAddingZikr} ${error.message}`);
+        }
+      };
+
+      const editZikr = (id, e) => {
+        e.stopPropagation();
+        log('App: editZikr triggered:', id);
+        try {
+          const zikr = state.azkar.find(z => z.id === id);
+          if (!zikr) {
+            console.error('App: Zikr not found:', id);
+            alert(t.errorZikrNotFound);
+            return;
+          }
+          openModal('editZikr', { zikr, defaultValue: zikr.text });
+        } catch (error) {
+          console.error('App: Error in editZikr:', error);
+        }
+      };
+
+      const handleEditZikr = (text) => {
+        log('App: handleEditZikr called with text:', text);
+        try {
+          if (!text || !text.trim()) {
+            console.warn('App: Empty zikr text');
+            alert(t.emptyZikrText);
+            return;
+          }
+          const trimmedText = text.trim();
+          const zikr = modal.data.zikr;
+          if (!zikr) {
+            console.error('App: Zikr not found in modal data');
+            alert(t.errorZikrNotFound);
+            return;
+          }
+          if (state.azkar.some(z => z.text === trimmedText && z.id !== zikr.id)) {
+            console.warn('App: Duplicate zikr:', trimmedText);
+            alert(t.duplicateZikr);
+            return;
+          }
+          setState(prevState => ({
+            ...prevState,
+            azkar: prevState.azkar.map(z => 
+              z.id === zikr.id ? { ...z, text: trimmedText } : z
+            ),
+            currentZikr: zikr.text === prevState.currentZikr ? trimmedText : prevState.currentZikr
+          }));
+          log('App: Zikr edited successfully');
+        } catch (error) {
+          console.error('App: Error in handleEditZikr:', error);
+          alert(`${t.errorEditingZikr} ${error.message}`);
+        }
+      };
+
+      const deleteZikr = (id, e) => {
+        e.stopPropagation();
+        log('App: deleteZikr triggered with id:', id);
+        try {
+          const zikr = state.azkar.find(z => z.id === id);
+          if (!zikr) {
+            console.error('App: Zikr not found for id:', id);
+            alert(t.errorZikrNotFound);
+            return;
+          }
+          openModal('deleteZikr', { zikr }, true);
+          log('App: Modal opened for deleteZikr');
+        } catch (error) {
+          console.error('App: Error in deleteZikr:', error);
+          alert(`${t.errorDeletingZikr} ${error.message}`);
+        }
+      };
+
+      const handleDeleteZikr = () => {
+        log('App: handleDeleteZikr called for zikr:', modal.data.zikr?.text);
+        try {
+          const zikr = modal.data.zikr;
+          if (!zikr) {
+            console.error('App: Zikr not found in modal data');
+            alert(t.errorZikrNotFound);
+            return;
+          }
+          setState(prevState => {
+            let newCurrentZikr = prevState.currentZikr;
+            if (zikr.text === prevState.currentZikr) {
+              const remainingAzkar = prevState.azkar.filter(z => z.id !== zikr.id);
+              newCurrentZikr = remainingAzkar.length > 0 ? remainingAzkar[0].text : '';
+            }
+            return {
+              ...prevState,
+              azkar: prevState.azkar.filter(z => z.id !== zikr.id),
+              currentZikr: newCurrentZikr,
+              count: 0
+            };
+          });
+          log('App: Zikr deleted successfully');
+        } catch (error) {
+          console.error('App: Error in handleDeleteZikr:', error);
+          alert(`${t.errorDeletingZikr} ${error.message}`);
+        }
+      };
+
+      const editGoal = (type, e) => {
+        e.stopPropagation();
+        log('App: editGoal triggered:', type);
+        try {
+          const currentGoal = state.stats.goals[type];
+          openModal('editGoal', { type, defaultValue: currentGoal.toString() });
+        } catch (error) {
+          console.error('App: Error in editGoal:', error);
+        }
+      };
+
+      const handleEditGoal = (value) => {
+        log('App: handleEditGoal called with value:', value);
+        try {
+          const goalValue = parseInt(value);
+          if (isNaN(goalValue) || goalValue <= 0) {
+            console.warn('App: Invalid goal value:', value);
+            alert(t.invalidGoalValue);
+            return;
+          }
+          setState(prevState => ({
+            ...prevState,
+            stats: {
+              ...prevState.stats,
+              goals: {
+                ...prevState.stats.goals,
+                [modal.data.type]: goalValue
+              }
+            }
+          }));
+          log('App: Goal updated successfully');
+        } catch (error) {
+          console.error('App: Error in handleEditGoal:', error);
+          alert(`${t.errorEditingGoal} ${error.message}`);
+        }
+      };
+
+      const updateSetting = (setting, value) => {
+        log('App: updateSetting triggered:', setting, value);
+        try {
+          setState(prevState => ({
+            ...prevState,
+            settings: {
+              ...prevState.settings,
+              [setting]: value
+            }
+          }));
+          if (setting === 'language') {
+            setIsLanguageDropdownOpen(false);
+          }
+        } catch (error) {
+          console.error('App: Error in updateSetting:', error);
+        }
+      };
+
+      const showAbout = (e) => {
+        e.stopPropagation();
+        log('App: showAbout triggered');
+        try {
+          openModal('about', {}, true);
+          log('App: Modal opened for about');
+        } catch (error) {
+          console.error('App: Error in showAbout:', error);
+          alert('Error while opening about window: ' + error.message);
+        }
+      };
+
+      const toggleLanguageDropdown = () => {
+        setIsLanguageDropdownOpen(!isLanguageDropdownOpen);
+      };
+
+      const playStation = (stationId) => {
+        try {
+          const station = state.radio.stations.find(s => s.id === stationId);
+          if (!station) return;
+          if (state.radio.currentStation === stationId && state.radio.isPlaying) {
+            return;
+          }
+          setState(prevState => ({
+            ...prevState,
+            radio: {
+              ...prevState.radio,
+              currentStation: stationId,
+              isPlaying: true
+            }
+          }));
+          if (audioRef.current) {
+            audioRef.current.pause();
+          }
+          audioRef.current = new Audio(station.url);
+          audioRef.current.addEventListener('canplay', () => {
+            log('Radio: Stream ready to play');
+            audioRef.current.play().catch(err => {
+              console.error('Error playing audio:', err);
+              setState(prevState => ({
+                ...prevState,
+                radio: {
+                  ...prevState.radio,
+                  isPlaying: false
+                }
+              }));
+            });
+          });
+          audioRef.current.addEventListener('error', (e) => {
+            console.error('Audio error:', e);
+            setState(prevState => ({
+              ...prevState,
+              radio: {
+                ...prevState.radio,
+                isPlaying: false
+              }
+            }));
+          });
+          audioRef.current.autoplay = true;
+          audioRef.current.load();
+          if (activeTab !== 'radio') {
+            setShowMiniPlayer(true);
+          }
+        } catch (error) {
+          console.error('Error playing station:', error);
+          setState(prevState => ({
+            ...prevState,
+            radio: {
+              ...prevState.radio,
+              isPlaying: false
+            }
+          }));
+        }
+      };
+
+      const togglePlayPause = () => {
+        try {
+          if (!state.radio.currentStation) {
+            playStation('1');
+            return;
+          }
+          if (state.radio.isPlaying) {
+            if (audioRef.current) {
+              audioRef.current.pause();
+            }
+            setState(prevState => ({
+              ...prevState,
+              radio: {
+                ...prevState.radio,
+                isPlaying: false
+              }
+            }));
+            setShowMiniPlayer(false);
+          } else {
+            playStation(state.radio.currentStation);
+          }
+        } catch (error) {
+          console.error('Error toggling play/pause:', error);
+        }
+      };
+
+      React.useEffect(() => {
+        if (activeTab === 'radio') {
+          setShowMiniPlayer(false);
+        } else if (state.radio.isPlaying) {
+          setShowMiniPlayer(true);
+        }
+      }, [activeTab, state.radio.isPlaying]);
+
+      const filteredAzkar = state.azkar; // Direct mapping as search is removed
+
+      const dailyProgress = Math.min((state.dailyCount / state.stats.goals.daily) * 100, 100);
+      const statsDaily = Math.min((state.stats.daily / state.stats.goals.daily) * 100, 100);
+      const statsMonthly = Math.min((state.stats.monthly / state.stats.goals.monthly) * 100, 100);
+
+      const formatGregorianDate = () => {
+        try {
+          return t.gregorianDate(new Date());
+        } catch (error) {
+          console.error('App: Error in formatGregorianDate:', error);
+          return t.dateNotAvailable;
+        }
+      };
+
+      const formatMaxDailyDate = (dateString) => {
+        try {
+          return t.maxDailyDate(dateString);
+        } catch (error) {
+          console.error('App: Error in formatMaxDailyDate:', error);
+          return t.dateNotAvailable;
+        }
+      };
+
+      const currentZikr = state.azkar.find(z => z.text === state.currentZikr);
+      const circleProgress = currentZikr ? Math.min((state.count / currentZikr.circleGoal) * 100, 100) : 0;
+      const circumference = 2 * Math.PI * 120;
+      const offset = circumference - (circleProgress / 100) * circumference;
+
+      const searchIconPosition = state.settings.language === 'ar' ? 'left' : 'right';
+
+      const getCurrentLanguageDisplay = () => {
+        return state.settings.language === 'ar' ? t.arabic : t.english;
+      };
+
+      const languageOptions = [
+        { code: 'ar', name: translations.ar.arabic, flag: '🇸🇦' },
+        { code: 'en', name: translations.en.english, flag: '🇺🇸' }
+      ];
+
+      const getStationName = (stationIndex) => {
+        const index = parseInt(stationIndex) - 1;
+        if (state.settings.language === 'en' && t.radioStations && t.radioStations[index]) {
+          return t.radioStations[index];
+        }
+        return state.radio.stations[index]?.name || '';
+      };
+
+      const getCurrentStationName = () => {
+        if (!state.radio.currentStation) return '';
+        return getStationName(state.radio.currentStation);
+      };
+
+      return (
+        <div className={`min-h-screen text-[color:--text-color] mx-auto max-w-md transition-dir`}>
+          <style>
+            {`
+              :root {
+                --text-color: ${state.settings.theme === 'dark' ? '#ffffff' : '#000000'};
+                --input-bg: ${state.settings.theme === 'dark' ? '#1a1a1a' : '#ffffff'};
+                --input-border: ${state.settings.theme === 'dark' ? '#2d2d2d' : '#d4d4d4'};
+                --button-bg: ${state.settings.theme === 'dark' ? '#2d2d2d' : '#e5e5e5'};
+                --card-bg: ${state.settings.theme === 'dark' ? '#1a1a1a' : '#ffffff'};
+                --card-border: ${state.settings.theme === 'dark' ? '#2d2d2d' : '#d4d4d4'};
+                --progress-bar-bg: ${state.settings.theme === 'dark' ? '#2d2d2d' : '#f0f0f0'};
+              }
+            `}
+          </style>
+          
+          {activeTab === 'tasbih' && (
+            <button
+              onClick={toggleTheme}
+              className="fixed top-4 left-4 z-50 w-10 h-10 flex items-center justify-center p-0 rounded-full bg-[color:--card-bg] shadow-sm border border-[color:--card-border] transition-transform hover:scale-110"
+              title={state.settings.theme === 'dark' ? "الوضع النهاري" : "الوضع الليلي"}
+            >
+              {state.settings.theme === 'dark' ? 
+                <span className="text-xl leading-none mt-0.5">☀️</span> : 
+                <span className="text-xl leading-none mt-0.5">🌙</span>
+              }
+            </button>
+          )}
+
+          <Modal
+            isOpen={modal.isOpen && modal.type === 'editZikrGoal'}
+            onClose={closeModal}
+            onSubmit={handleEditZikrGoal}
+            title={`${t.editZikrGoalTitle} "${modal.data.zikr?.text || ''}"`}
+            defaultValue={modal.data.defaultValue || ''}
+            type="number"
+            lang={state.settings.language}
+          />
+          <Modal
+            isOpen={modal.isOpen && modal.type === 'addZikr'}
+            onClose={closeModal}
+            onSubmit={handleAddZikr}
+            title={t.addZikrTitle}
+            defaultValue={modal.data.defaultValue || ''}
+            lang={state.settings.language}
+          />
+          <Modal
+            isOpen={modal.isOpen && modal.type === 'editZikr'}
+            onClose={closeModal}
+            onSubmit={handleEditZikr}
+            title={t.editZikrTitle}
+            defaultValue={modal.data.defaultValue || ''}
+            lang={state.settings.language}
+          />
+          <Modal
+            isOpen={modal.isOpen && modal.type === 'deleteZikr'}
+            onClose={closeModal}
+            onSubmit={handleDeleteZikr}
+            title={`${t.deleteZikrTitle} "${modal.data.zikr?.text || ''}"?`}
+            isConfirm={true}
+            lang={state.settings.language}
+          />
+          <Modal
+            isOpen={modal.isOpen && modal.type === 'editGoal'}
+            onClose={closeModal}
+            onSubmit={handleEditGoal}
+            title={modal.data.type === 'daily' ? t.editDailyGoalTitle : t.editMonthlyGoalTitle}
+            defaultValue={modal.data.defaultValue || ''}
+            type="number"
+            lang={state.settings.language}
+          />
+          <Modal
+            isOpen={modal.isOpen && modal.type === 'about'}
+            onClose={closeModal}
+            title={t.aboutTitle}
+            type="about"
+            isConfirm={true}
+            lang={state.settings.language}
+          />
+          <Modal
+            isOpen={modal.isOpen && modal.type === 'goalReached'}
+            onClose={closeModal}
+            title={t.congrats}
+            type="goalReached"
+            isConfirm={true}
+            lang={state.settings.language}
+          />
+          <Modal
+            isOpen={modal.isOpen && modal.type === 'dailyGoalReached'}
+            onClose={closeModal}
+            title={t.congrats}
+            type="dailyGoalReached"
+            isConfirm={true}
+            lang={state.settings.language}
+          />
+          <Modal
+            isOpen={modal.isOpen && modal.type === 'maxDailyZikrReached'}
+            onClose={closeModal}
+            title={t.congrats}
+            type="maxDailyZikrReached"
+            isConfirm={true}
+            lang={state.settings.language}
+          />
+
+          <div className="pt-6 pb-16">
+            {activeTab === 'tasbih' && (
+              <div className="px-4 py-6">
+                <div className="flex flex-col items-center justify-center mt-8">
+                  <h2 className="text-xl font-medium mb-4">{state.currentZikr}</h2>
+                  
+                  <div 
+                    className="relative w-72 h-72 flex items-center justify-center no-select"
+                    onClick={incrementCounter}
+                    onMouseDown={handleMouseDown}
+                    onMouseUp={handleMouseUp}
+                    onTouchStart={handleMouseDown}
+                    onTouchEnd={handleMouseUp}
+                    onContextMenu={handleContextMenu}
+                  >
+                    {isPressed && <div className="ripple-effect"></div>}
+                    <svg className="progress-circle" width="272" height="272" viewBox="0 0 272 272">
+                      <circle
+                        className="progress-circle-bg"
+                        cx="136"
+                        cy="136"
+                        r="120"
+                      />
+                      <circle
+                        className="progress-circle-fill"
+                        cx="136"
+                        cy="136"
+                        r="120"
+                        strokeDasharray={circumference}
+                        strokeDashoffset={offset}
+                      />
+                    </svg>
+                    <div 
+                      className="circle-button bg-[color:--card-bg] border border-[color:--card-border] shadow-lg rounded-full w-64 h-64 flex items-center justify-center cursor-pointer relative"
+                    >
+                      <div className="text-center">
+                        <h2 className="text-6xl font-bold">{state.count}</h2>
+                      </div>
+                    </div>
+                    <button 
+                      onClick={resetCounter}
+                      className={`absolute top-[280px] ${state.settings.language === 'ar' ? 'right-4' : 'left-4'} w-12 h-12 rounded-full bg-[color:--card-bg] border border-[color:--card-border] shadow-md flex items-center justify-center cursor-pointer transition-transform hover:scale-110`}
+                    >
+                      <span className="text-primary text-xl">↺</span>
+                    </button>
+                    <button 
+                      onClick={editCurrentZikrGoal}
+                      className={`absolute top-[280px] ${state.settings.language === 'ar' ? 'left-4' : 'right-4'} w-12 h-12 rounded-full bg-[color:--card-bg] border border-[color:--card-border] shadow-md flex items-center justify-center cursor-pointer transition-transform hover:scale-110`}
+                    >
+                      <span className="text-[color:--text-color] text-xl">✎</span>
+                    </button>
+                  </div>
+
+                  <div className="mt-24 bg-[color:--card-bg] border border-[color:--card-border] rounded-lg shadow-sm p-4 w-full">
+                    <div className="flex justify-between items-center">
+                      <span>{t.dailyGoal}</span>
+                      <span className="font-medium">
+                        {state.dailyCount} / {state.stats.goals.daily}
+                      </span>
+                    </div>
+                    <div className="w-full bg-[color:--progress-bar-bg] rounded-full h-2 mt-2">
+                      <div 
+                        className="bg-primary h-2 rounded-full" 
+                        style={{ width: `${dailyProgress}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'azkar' && (
+              <div className="px-4 py-6">
+                <div className="mt-2 space-y-4"> {/* Reduced margin */}
+                  <div className="space-y-4">
+                    {filteredAzkar.map(zikr => (
+                      <div 
+                        key={zikr.id}
+                        onClick={() => switchToZikr(zikr.text)} 
+                        className="bg-[color:--card-bg] border border-[color:--card-border] rounded-lg shadow-sm p-4 cursor-pointer"
+                      >
+                        <div className="flex justify-between">
+                          <h3 className="font-medium">{zikr.text}</h3>
+                          <div className={`flex ${state.settings.language === 'ar' ? 'space-x-2 space-x-reverse' : 'space-x-2'}`}>
+                            <button 
+                              onClick={(e) => editZikr(zikr.id, e)}
+                              className="w-8 h-8 flex items-center justify-center text-[color:--text-color] bg-[color:--button-bg] rounded-full cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                              title={t.editZikrTitle}
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125" />
+                              </svg>
+                            </button>
+                            <button 
+                              onClick={(e) => deleteZikr(zikr.id, e)}
+                              className="w-8 h-8 flex items-center justify-center text-red-500 bg-red-50 rounded-full cursor-pointer hover:bg-red-100 transition-colors"
+                              title={t.deleteZikrTitle}
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                            </button>
+                          </div>
+                        </div>
+                        <div className="mt-2 flex justify-between text-sm">
+                          <span className="zikr-count">{t.dailyCount}: {zikr.dailyCount}</span>
+                        </div>
+                        <div className="mt-1 flex justify-between text-sm">
+                          <span className="zikr-count">{t.totalCount}: {zikr.totalCount}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className={`fixed bottom-20 ${state.settings.language === 'ar' ? 'left-4' : 'right-4'} z-10`}>
+                    <button 
+                      onClick={addZikr}
+                      className="w-14 h-14 bg-primary rounded-full shadow-lg flex items-center justify-center text-white cursor-pointer"
+                    >
+                      <span className="text-2xl">+</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'stats' && (
+              <div className="px-4 pt-2 pb-6"> {/* Reduced top padding */}
+                <div className="mt-0"> {/* Removed top margin */}
+                  <div className="text-center mb-6">
+                    <h2 className="text-lg font-medium">{formatGregorianDate()}</h2>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="bg-[color:--card-bg] border border-[color:--card-border] rounded-lg shadow-sm p-5">
+                      <div className="flex items-center">
+                        <div className={`w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center ${state.settings.language === 'ar' ? 'ml-4' : 'mr-4'}`}>
+                          <span className="text-primary text-xl">📅</span>
+                        </div>
+                        <div>
+                          <h3 className="text-[color:--text-color] text-sm">{t.dailyStats}</h3>
+                          <p className="text-3xl font-bold mt-1">{state.stats.daily}</p>
+                        </div>
+                        <div className={`${state.settings.language === 'ar' ? 'mr-auto' : 'ml-auto'}`}>
+                          <button 
+                            onClick={(e) => editGoal('daily', e)}
+                            className="w-8 h-8 flex items-center justify-center text-[color:--text-color] bg-[color:--button-bg] rounded-full"
+                          >
+                            <span>✎</span>
+                          </button>
+                        </div>
+                      </div>
+                      <div className="mt-4">
+                        <div className="flex justify-between text-sm mb-1">
+                          <span className="text-[color:--text-color]">{t.dailyGoal}</span>
+                          <span className="text-primary">
+                            {state.stats.daily} / {state.stats.goals.daily}
+                          </span>
+                        </div>
+                        <div className="w-full bg-[color:--progress-bar-bg] rounded-full h-2">
+                          <div 
+                            className="bg-primary h-2 rounded-full" 
+                            style={{ width: `${statsDaily}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-[color:--card-bg] border border-[color:--card-border] rounded-lg shadow-sm p-5">
+                      <div className="flex items-center">
+                        <div className={`w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center ${state.settings.language === 'ar' ? 'ml-4' : 'mr-4'}`}>
+                          <span className="text-primary text-xl">📅</span>
+                        </div>
+                        <div>
+                          <h3 className="text-[color:--text-color] text-sm">{t.monthlyStats}</h3>
+                          <p className="text-3xl font-bold mt-1">{state.stats.monthly}</p>
+                        </div>
+                        <div className={`${state.settings.language === 'ar' ? 'mr-auto' : 'ml-auto'}`}>
+                          <button 
+                            onClick={(e) => editGoal('monthly', e)}
+                            className="w-8 h-8 flex items-center justify-center text-[color:--text-color] bg-[color:--button-bg] rounded-full"
+                          >
+                            <span>✎</span>
+                          </button>
+                        </div>
+                      </div>
+                      <div className="mt-4">
+                        <div className="flex justify-between text-sm mb-1">
+                          <span className="text-[color:--text-color]">{t.monthlyGoal}</span>
+                          <span className="text-primary">
+                            {state.stats.monthly} / {state.stats.goals.monthly}
+                          </span>
+                        </div>
+                        <div className="w-full bg-[color:--progress-bar-bg] rounded-full h-2">
+                          <div 
+                            className="bg-primary h-2 rounded-full" 
+                            style={{ width: `${statsMonthly}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-[color:--card-bg] border border-[color:--card-border] rounded-lg shadow-sm p-5">
+                      <div className="flex items-center">
+                        <div className={`w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center ${state.settings.language === 'ar' ? 'ml-4' : 'mr-4'}`}>
+                          <span className="text-primary text-xl">🥇</span>
+                        </div>
+                        <div>
+                          <h3 className="text-[color:--text-color] text-sm">{t.maxDailyStats}</h3>
+                          <p className="text-3xl font-bold mt-1">{state.stats.maxDailyZikr.count}</p>
+                        </div>
+                      </div>
+                      <div className="mt-4">
+                        <div className="flex justify-between text-sm mb-1">
+                          <span className="text-[color:--text-color]">{t.date}</span>
+                          <span className="text-primary">{formatMaxDailyDate(state.stats.maxDailyZikr.date)}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-[color:--card-bg] border border-[color:--card-border] rounded-lg shadow-sm p-5">
+                      <div className="flex items-center">
+                        <div className={`w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center ${state.settings.language === 'ar' ? 'ml-4' : 'mr-4'}`}>
+                          <span className="text-primary text-xl">🏆</span>
+                        </div>
+                        <div>
+                          <h3 className="text-[color:--text-color] text-sm">{t.totalStats}</h3>
+                          <p className="text-3xl font-bold mt-1">{state.stats.total}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="fixed bottom-0 w-full bg-[color:--card-bg] border-t border-[color:--card-border] shadow-sm z-10 max-w-md">
+              <div className="grid grid-cols-3 h-16">
+                <button 
+                  onClick={() => setActiveTab('tasbih')}
+                  className={`flex flex-col items-center justify-center cursor-pointer ${activeTab === 'tasbih' ? 'text-primary' : 'text-[color:--text-color]'}`}
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <span className="text-xl">📿</span>
+                  </div>
+                  <span className="text-xs mt-1">{t.tasbihTab}</span>
+                </button>
+                <button 
+                  onClick={() => setActiveTab('azkar')}
+                  className={`flex flex-col items-center justify-center cursor-pointer ${activeTab === 'azkar' ? 'text-primary' : 'text-[color:--text-color]'}`}
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <span className="text-xl">📖</span>
+                  </div>
+                  <span className="text-xs mt-1">{t.azkarTab}</span>
+                </button>
+                <button 
+                  onClick={() => setActiveTab('stats')}
+                  className={`flex flex-col items-center justify-center cursor-pointer ${activeTab === 'stats' ? 'text-primary' : 'text-[color:--text-color]'}`}
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <span className="text-xl">📊</span>
+                  </div>
+                  <span className="text-xs mt-1">{t.statsTab}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    try {
+      log('Main: Attempting to render React app');
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<App />);
+      log('Main: React app rendered successfully');
+    } catch (error) {
+      console.error('Main: Error rendering React app:', error);
+      document.getElementById('root').innerHTML = '<h1 style="color: red; text-align: center;">Error: Failed to load the application. Check the console for more details.</h1>';
+    }
+    </script>
+  </body>
+</html>
