@@ -56,36 +56,12 @@ body{margin:0;font-family:Tahoma,Arial;background:#fff;color:#000}
 
 .footer{text-align:center;font-size:13px;color:#666}
 
-/* ===== التعديل الخاص بالموبايل ===== */
 @media screen and (max-width: 768px) {
-    /* العنوان الرئيسي */
-    .header h1 {
-        white-space: nowrap;
-        font-size: 6.5vw !important;
-    }
-
-    /* تفاصيل اليوم داخل البطاقة (اليوم - التاريخ - رقم رمضان) */
-    .day-title {
-        white-space: nowrap;
-        font-size: 3.5vw !important; /* حجم صغير نسبياً ليسع النص الطويل */
-    }
-
-    /* عناوين الأوقات (إمساك، فجر، مغرب) */
-    .time-box div:first-child {
-        white-space: nowrap;
-        font-size: 3.5vw !important;
-    }
-
-    /* قيم الوقت (الساعة) */
-    .time-box div:last-child {
-        white-space: nowrap;
-        font-size: 4.5vw !important;
-    }
-    
-    /* منع التفاف صناديق الوقت */
-    .times {
-        flex-wrap: nowrap;
-    }
+    .header h1 { white-space: nowrap; font-size: 6.5vw !important; }
+    .day-title { white-space: nowrap; font-size: 3.5vw !important; }
+    .time-box div:first-child { white-space: nowrap; font-size: 3.5vw !important; }
+    .time-box div:last-child { white-space: nowrap; font-size: 4.5vw !important; }
+    .times { flex-wrap: nowrap; }
 }
 </style>
 </head>
@@ -108,17 +84,23 @@ const city="Cairo";
 const country="Egypt";
 const hijriYear=1447;
 const ramadanMonth=9;
-const STORAGE_KEY="ramadan_1447_cairo";
+// قمنا بتغيير المفتاح لتحديث البيانات المخزنة القديمة
+const STORAGE_KEY="ramadan_1447_fixed_thursday"; 
+
+// === هام: تحديد تاريخ بداية رمضان يدوياً ليكون الخميس ===
+// السنة: 2026, الشهر: 1 (فبراير لأن العد يبدأ من 0), اليوم: 19
+const START_RAMADAN_DATE = new Date(2026, 1, 19); 
 
 const monthsAr=[
  "يناير","فبراير","مارس","أبريل","مايو","يونيو",
  "يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"
 ];
+const daysAr = ["الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
 
-/* ========= تحويل الوقت (تصحيح NaN) ========= */
+/* ========= تحويل الوقت ========= */
 function to12(time){
  if(!time) return "--:--";
- time=time.split(" ")[0]; // إزالة (EET)
+ time=time.split(" ")[0]; 
  let [h,m]=time.split(":").map(Number);
  if(isNaN(h)||isNaN(m)) return "--:--";
  const p=h>=12?"م":"ص";
@@ -136,20 +118,26 @@ function render(days){
  document.getElementById("location").innerText=
   `التوقيت المحلي — ${city}, ${country}`;
 
- days.forEach(d=>{
-  const g=d.date.gregorian;
+ days.forEach((d, index) => {
+  // === التعديل الجوهري: حساب التاريخ بناءً على بداية رمضان المثبتة ===
+  // نقوم بإنشاء تاريخ جديد يساوي (تاريخ البداية + رقم اليوم في المصفوفة)
+  let calculatedDate = new Date(START_RAMADAN_DATE);
+  calculatedDate.setDate(START_RAMADAN_DATE.getDate() + index);
+
+  const isToday = calculatedDate.toDateString() === todayStr;
   
-  // === بداية التعديل: تصحيح قراءة التاريخ ===
-  // التاريخ يأتي بصيغة يوم-شهر-سنة، لذا نفككه ونعيد تركيبه للتأكد
-  const [dd, mm, yyyy] = g.date.split('-').map(Number);
-  const isToday = new Date(yyyy, mm - 1, dd).toDateString() === todayStr;
-  // === نهاية التعديل ===
+  // استخراج تفاصيل التاريخ المحسوب
+  const dayName = daysAr[calculatedDate.getDay()];
+  const dayNum = calculatedDate.getDate();
+  const monthName = monthsAr[calculatedDate.getMonth()];
+  const yearNum = calculatedDate.getFullYear();
+  const formattedGregorian = `${dayNum} ${monthName} ${yearNum}`;
 
   const cell=document.createElement("div");
   cell.className="day-cell"+(isToday?" active":"");
   cell.innerHTML=`
    ${isToday?`<div class="today-badge-grid">اليوم</div>`:""}
-   ${d.date.hijri.day}
+   ${index + 1}
    ${isToday?`<div class="today-dot"></div>`:""}
   `;
 
@@ -158,16 +146,13 @@ function render(days){
     .forEach(c=>c.classList.remove("active"));
    cell.classList.add("active");
 
-   const formattedGregorian=
-    `${g.day} ${monthsAr[g.month.number-1]} ${g.year}`;
-
    card.innerHTML=`
     <div class="day-card">
      ${isToday?`<div class="today-badge">اليوم</div>`:""}
      <div class="day-title">
-      ${d.date.hijri.weekday.ar} —
+      ${dayName} —
       ${formattedGregorian} —
-      ${d.date.hijri.day} رمضان
+      ${index + 1} رمضان
      </div>
 
      <div class="times">
@@ -190,10 +175,12 @@ function render(days){
 
   grid.appendChild(cell);
   if(isToday) cell.click();
+  // إذا لم يكن اليوم رمضان، نفتح اليوم الأول افتراضيًا
+  if(!document.querySelector('.day-cell.active') && index === 0) cell.click();
  });
 }
 
-/* ========= تحميل البيانات (أونلاين / أوفلاين) ========= */
+/* ========= تحميل البيانات ========= */
 function loadData(){
  const cached=localStorage.getItem(STORAGE_KEY);
  if(cached){
@@ -201,6 +188,8 @@ function loadData(){
   return;
  }
 
+ // نطلب البيانات. ملاحظة: قد تختلف التواريخ الميلادية في الـ API
+ // لكن دالة render ستقوم بتصحيحها بصرياً لتطابق يوم الخميس
  fetch(`https://api.aladhan.com/v1/hijriCalendarByCity?city=${city}&country=${country}&month=${ramadanMonth}&year=${hijriYear}&method=5`)
   .then(r=>r.json())
   .then(j=>{
